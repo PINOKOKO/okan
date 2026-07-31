@@ -181,16 +181,8 @@
     <!-- 👾 キャラ配置エリア -->
     <div id="okan-container" class="okan-container pos-tv">
       
-      <!-- ★立ち姿オカン (SVG内側を全体にドット輪郭線が出るように完全に修正)★ -->
+      <!-- ★立ち姿オカン (ふわふわ茶髪パーマ) のみ残す★ -->
       <svg id="okan-stand" viewBox="0 0 32 32" style="width:100%; height:100%; shape-rendering: crispEdges;">
-        <!-- 
-          全体を囲む黒塗りエリア（輪郭線）
-          髪(7,3)から足(21,31)まで、外側に1ピクセルの黒い枠を作るパス
-        -->
-        <path d="
-          M 7,3 H 25 V 4 H 26 V 6 H 27 V 10 H 26 V 12 H 25 V 19 H 24 V 29 H 23 V 31 H 22 V 32 H 10 V 31 H 9 V 29 H 8 V 19 H 7 V 12 H 6 V 10 H 7 V 6 H 6 V 4 H 7 Z
-        " fill="#111111"/>
-
         <!-- パーマ髪（茶色・モコモコ感） -->
         <path d="M 10 3 H 22 V 4 H 24 V 6 H 25 V 10 H 24 V 12 H 8 V 10 H 7 V 6 H 8 V 4 H 10 Z" fill="#795548"/>
         <path d="M 11 4 H 21 V 5 H 23 V 7 H 24 V 9 H 23 V 11 H 9 V 9 H 8 V 7 H 9 V 5 Z" fill="#a1887f"/>
@@ -211,7 +203,13 @@
         <!-- 足 -->
         <rect x="10" y="29" width="3" height="3" fill="#ffdfc4"/>
         <rect x="19" y="29" width="3" height="3" fill="#ffdfc4"/>
+
+        <!-- 輪郭線 -->
+        <path d="M 10 3 H 22 V 4 H 24 V 6 H 25 V 10 H 24 V 12 H 8 V 10 H 7 V 6 H 8 V 4 Z" 
+              fill="none" stroke="#111" stroke-width="0.8"/>
       </svg>
+
+      <!-- ★元の `#okan-lay`（ごろ寝ドット絵）は削除しました★ -->
 
       <!-- 💨 ドット絵おなら雲 -->
       <svg id="fart-cloud" class="fart-cloud" viewBox="0 0 16 16" style="shape-rendering: crispEdges;">
