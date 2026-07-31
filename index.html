@@ -57,22 +57,22 @@
   /* --- キャラ配置エリア --- */
   .okan-container {
     position: absolute;
-    width: 72px;
-    height: 72px;
+    width: 80px;
+    height: 80px;
     transition: all 0.2s steps(4);
     z-index: 10;
   }
 
   /* 位置設定 */
-  .pos-tv { top: 55px; right: 10px; }
-  .pos-chabudai-left { top: 90px; left: 5px; }
-  .pos-chabudai-right { top: 90px; right: 10px; }
-  .pos-center { top: 65px; left: 34%; }
+  .pos-tv { top: 50px; right: 5px; }
+  .pos-chabudai-left { top: 85px; left: 0px; }
+  .pos-chabudai-right { top: 85px; right: 5px; }
+  .pos-center { top: 60px; left: 32%; }
 
   /* おならアニメーション */
   .fart-cloud {
     position: absolute;
-    top: 36px; right: -10px;
+    top: 40px; right: -12px;
     width: 24px; height: 24px;
     opacity: 0;
     z-index: 15;
@@ -90,9 +90,9 @@
 
   /* 掃除アニメーション */
   @keyframes clean-dq {
-    0% { left: 10px; top: 90px; transform: scaleX(1); }
-    50% { left: 180px; top: 65px; transform: scaleX(-1); }
-    100% { left: 10px; top: 90px; transform: scaleX(1); }
+    0% { left: 5px; top: 85px; transform: scaleX(1); }
+    50% { left: 175px; top: 60px; transform: scaleX(-1); }
+    100% { left: 5px; top: 85px; transform: scaleX(1); }
   }
   .anim-cleaning {
     animation: clean-dq 3s infinite steps(6) !important;
@@ -167,63 +167,78 @@
       <rect x="106" y="117" width="4" height="4" fill="#2d481e"/>
     </svg>
 
-    <!-- 👾 極細輪郭＆新ポーズのオカン -->
+    <!-- 👾 精密ドット＆パーマ髪オカン -->
     <div id="okan-container" class="okan-container pos-tv">
       
-      <!-- 1. 立ち姿オカン -->
-      <svg id="okan-stand" viewBox="0 0 24 24" style="width:100%; height:100%; shape-rendering: crispEdges;">
-        <!-- パーマ頭 -->
-        <rect x="7" y="3" width="10" height="5" fill="#795548"/>
+      <!-- 1. 立ち姿オカン (ふわふわパーマ) -->
+      <svg id="okan-stand" viewBox="0 0 32 32" style="width:100%; height:100%; shape-rendering: crispEdges;">
+        <!-- パーマ髪（モコモコ感） -->
+        <path d="M 10 3 H 22 V 4 H 24 V 6 H 25 V 10 H 24 V 12 H 8 V 10 H 7 V 6 H 8 V 4 H 10 Z" fill="#6d4c41"/>
+        <path d="M 11 4 H 21 V 5 H 23 V 7 H 24 V 9 H 23 V 11 H 9 V 9 H 8 V 7 H 9 V 5 Z" fill="#8d6e63"/>
+        
         <!-- 顔 -->
-        <rect x="8" y="8" width="8" height="5" fill="#ffdfc4"/>
-        <!-- 割烹着 -->
-        <rect x="7" y="13" width="10" height="7" fill="#ffffff"/>
-        <!-- 帯 -->
-        <rect x="7" y="15" width="10" height="1" fill="#fbc02d"/>
-        <!-- 足 -->
-        <rect x="8" y="20" width="2" height="2" fill="#ffdfc4"/>
-        <rect x="14" y="20" width="2" height="2" fill="#ffdfc4"/>
-        <!-- 顔パーツ -->
-        <rect x="9" y="10" width="2" height="1" fill="#222"/>
-        <rect x="13" y="10" width="2" height="1" fill="#222"/>
-        <rect x="8" y="11" width="1" height="1" fill="#ff8a80"/>
-        <rect x="15" y="11" width="1" height="1" fill="#ff8a80"/>
-        <rect x="11" y="12" width="2" height="1" fill="#d32f2f"/>
+        <rect x="9" y="11" width="14" height="8" fill="#ffdfc4"/>
+        <!-- 目・眉・口 -->
+        <rect x="11" y="13" width="3" height="1" fill="#222"/>
+        <rect x="18" y="13" width="3" height="1" fill="#222"/>
+        <rect x="10" y="15" width="2" height="1" fill="#ff8a80"/>
+        <rect x="20" y="15" width="2" height="1" fill="#ff8a80"/>
+        <rect x="14" y="17" width="4" height="1" fill="#d32f2f"/>
 
-        <!-- ✨ ぴったり密着する極細アウトライン -->
-        <path d="M 7 3 H 17 V 8 H 16 V 13 H 17 V 20 H 16 V 22 H 14 V 20 H 10 V 22 H 8 V 20 H 7 V 13 H 8 V 8 H 7 Z" 
-              fill="none" stroke="#111" stroke-width="0.8" stroke-linejoin="miter"/>
+        <!-- 服（割烹着） -->
+        <rect x="8" y="19" width="16" height="10" fill="#ffffff"/>
+        <!-- 帯 -->
+        <rect x="8" y="22" width="16" height="2" fill="#fbc02d"/>
+        <!-- 足 -->
+        <rect x="10" y="29" width="3" height="3" fill="#ffdfc4"/>
+        <rect x="19" y="29" width="3" height="3" fill="#ffdfc4"/>
+
+        <!-- 輪郭線 -->
+        <path d="M 10 3 H 22 V 4 H 24 V 6 H 25 V 10 H 24 V 12 H 23 V 19 H 24 V 29 H 22 V 32 H 19 V 29 H 13 V 32 H 10 V 29 H 8 V 19 H 9 V 12 H 8 V 10 H 7 V 6 H 8 V 4 Z" 
+              fill="none" stroke="#111" stroke-width="0.8"/>
       </svg>
 
-      <!-- 2. ごろ寝オカン（イメージ画像に忠実な投げ出し足ポーズ） -->
-      <svg id="okan-lay" viewBox="0 0 28 24" style="width:100%; height:100%; display:none; shape-rendering: crispEdges;">
-        <!-- パーマ頭 -->
-        <rect x="5" y="6" width="6" height="5" fill="#795548"/>
-        <!-- 顔 -->
-        <rect x="4" y="11" width="6" height="5" fill="#ffdfc4"/>
-        <!-- 肘と頭を乗せる手 -->
-        <rect x="2" y="12" width="2" height="5" fill="#ffdfc4"/>
-        <rect x="2" y="16" width="4" height="1" fill="#ffdfc4"/>
-        <!-- 体（割烹着） -->
-        <rect x="10" y="10" width="10" height="6" fill="#ffffff"/>
-        <!-- 帯 -->
-        <rect x="13" y="10" width="2" height="6" fill="#fbc02d"/>
-        <!-- 曲げた膝・腰の盛り上がり -->
-        <rect x="18" y="8" width="5" height="5" fill="#ffffff"/>
-        <!-- 前に投げ出した足（素足） -->
-        <rect x="20" y="15" width="7" height="2" fill="#ffdfc4"/>
+      <!-- 2. ごろ寝オカン (参考イラスト完全再現) -->
+      <svg id="okan-lay" viewBox="0 0 32 32" style="width:100%; height:100%; display:none; shape-rendering: crispEdges;">
+        <!-- 1. ふわふわパーマ髪 (紫〜茶グラデ) -->
+        <path d="M 3 10 H 12 V 11 H 13 V 16 H 12 V 18 H 2 V 16 H 1 V 11 H 2 V 10 Z" fill="#6a1b9a"/>
+        <path d="M 4 11 H 11 V 17 H 3 V 11 Z" fill="#8e24aa"/>
 
-        <!-- 目・ほっぺ -->
-        <rect x="5" y="12" width="2" height="1" fill="#222"/>
-        <rect x="8" y="12" width="1" height="1" fill="#222"/>
-        <rect x="4" y="14" width="1" height="1" fill="#ff8a80"/>
-        <rect x="8" y="14" width="1" height="1" fill="#ff8a80"/>
+        <!-- 2. 顔 (手のひらに乗っている) -->
+        <rect x="5" y="16" width="9" height="7" fill="#ffdfc4"/>
+        <!-- 目・口 -->
+        <rect x="7" y="18" width="2" height="1" fill="#222"/>
+        <rect x="11" y="18" width="2" height="1" fill="#222"/>
+        <rect x="9" y="21" width="2" height="1" fill="#d32f2f"/>
 
-        <!-- ✨ シルエットに完璧に沿う極細アウトライン -->
-        <path d="M 5 6 H 11 V 10 H 18 V 8 H 23 V 13 H 20 V 15 H 27 V 17 H 10 V 17 H 2 V 12 H 4 V 11 H 5 Z" 
-              fill="none" stroke="#111" stroke-width="0.8" stroke-linejoin="miter"/>
-        <!-- 膝から下への落ち込み線 -->
-        <path d="M 20 13 V 15" stroke="#111" stroke-width="0.8"/>
+        <!-- 3. 肘〜頭を支える袖＆腕 -->
+        <rect x="2" y="21" width="4" height="6" fill="#fbc02d"/> <!-- 服(黄) -->
+        <rect x="3" y="22" width="1" height="1" fill="#795548"/> <!-- 柄 -->
+        <rect x="2" y="27" width="10" height="2" fill="#ffdfc4"/> <!-- 手首・床についた腕 -->
+
+        <!-- 4. 割烹着（白い体） -->
+        <path d="M 13 18 H 25 V 26 H 12 V 22 H 13 Z" fill="#ffffff"/>
+
+        <!-- 5. 前に出した手（リモコン操作風） -->
+        <rect x="15" y="22" width="4" height="4" fill="#fbc02d"/> <!-- 黄色の袖 -->
+        <rect x="17" y="24" width="4" height="2" fill="#ffdfc4"/> <!-- 手 -->
+        <rect x="20" y="23" width="4" height="3" fill="#37474f"/> <!-- リモコン -->
+        <rect x="21" y="24" width="1" height="1" fill="#d32f2f"/> <!-- ボタン -->
+
+        <!-- 6. 投げ出した下半身＆足 -->
+        <path d="M 24 20 H 29 V 26 H 24 Z" fill="#fbc02d"/> <!-- 柄ズボン -->
+        <rect x="26" y="22" width="1" height="1" fill="#795548"/>
+        <!-- 足首〜足先（投げ出し） -->
+        <rect x="28" y="23" width="4" height="3" fill="#ffdfc4"/>
+
+        <!-- ✨ 輪郭線でパーツをカチッと分離 -->
+        <!-- 頭部・パーマ -->
+        <path d="M 3 10 H 12 V 11 H 13 V 16 H 12 V 18 H 5 V 21 H 2 V 28 H 32 V 23 H 29 V 20 H 24 V 18 H 13 V 16 H 2 V 11 Z" 
+              fill="none" stroke="#111" stroke-width="0.8"/>
+        <!-- 顔と手の境目 -->
+        <path d="M 5 23 H 13" stroke="#111" stroke-width="0.8"/>
+        <!-- 割烹着と袖の境界 -->
+        <path d="M 15 22 V 26" stroke="#111" stroke-width="0.8"/>
       </svg>
 
       <!-- 💨 ドット絵おなら雲 -->
