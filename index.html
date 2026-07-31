@@ -5,9 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="オカンといっしょ">
+<meta name="apple-mobile-web-app-title" content="オカン育成">
 
-<title>オカンいっしょ</title>
+<title>オカン育成</title>
 <style>
   body {
     background-color: #1a1a1a;
@@ -63,13 +63,13 @@
     z-index: 10;
   }
 
-  /* 位置（ちゃぶ台やテレビに合わせて配置） */
+  /* 位置設定 */
   .pos-tv { top: 60px; right: 15px; }
   .pos-chabudai-left { top: 95px; left: 10px; }
   .pos-chabudai-right { top: 95px; right: 15px; }
   .pos-center { top: 70px; left: 36%; }
 
-  /* ⭐ ドットおならアニメーション ⭐ */
+  /* ⭐ おならアニメーション ⭐ */
   .fart-cloud {
     position: absolute;
     top: 32px; right: -12px;
@@ -167,54 +167,61 @@
       <rect x="106" y="117" width="4" height="4" fill="#2d481e"/>
     </svg>
 
-    <!-- 👾 精巧24x24ピクセルアート・オカン -->
+    <!-- 👾 極細枠・高解像度ドット絵オカン -->
     <div id="okan-container" class="okan-container pos-tv">
       
-      <!-- 1. 立ち姿オカン (グリッドピクセル) -->
+      <!-- 1. 立ち姿オカン (細枠スッキリ版) -->
       <svg id="okan-stand" viewBox="0 0 24 24" style="width:100%; height:100%;">
-        <!-- 黒枠（主線） -->
-        <path d="M7 2h10v1h2v2h1v5h-1v1h1v10h-2v2h-3v-2h-2v2h-3v-2h-2v-10h1v-1h-1V5h1V3h2V2z" fill="#222222"/>
-        <!-- パーマ髪（茶色） -->
-        <path d="M8 3h8v2h2v4h-2V8H8v1H6V5h2V3z" fill="#795548"/>
-        <!-- 肌（顔） -->
+        <!-- パーマ頭 (茶) -->
+        <rect x="7" y="2" width="10" height="6" fill="#795548"/>
+        <!-- 顔 (肌) -->
         <rect x="8" y="8" width="8" height="5" fill="#ffdfc4"/>
-        <!-- にっこり目 -->
-        <rect x="9" y="10" width="2" height="1" fill="#222"/>
-        <rect x="13" y="10" width="2" height="1" fill="#222"/>
-        <!-- ほっぺた（ピンク） -->
-        <rect x="8" y="11" width="1" height="1" fill="#ff8a80"/>
-        <rect x="15" y="11" width="1" height="1" fill="#ff8a80"/>
-        <!-- 口 -->
-        <rect x="11" y="12" width="2" height="1" fill="#d32f2f"/>
-        <!-- 割烹着（白） -->
-        <path d="M7 13h10v7H7z" fill="#ffffff"/>
-        <!-- エプロン帯（黄色） -->
+        <!-- 割烹着 (白) -->
+        <rect x="7" y="13" width="10" height="7" fill="#ffffff"/>
+        <!-- エプロン帯 (黄) -->
         <rect x="7" y="15" width="10" height="1" fill="#fbc02d"/>
-        <!-- 脚 -->
+        <!-- 足 (肌) -->
         <rect x="8" y="20" width="2" height="2" fill="#ffdfc4"/>
         <rect x="14" y="20" width="2" height="2" fill="#ffdfc4"/>
+
+        <!-- 1px細黒枠 (輪郭) -->
+        <path d="
+          M7,2 h10 v1 h1 v5 h-1 v1 h1 v11 h-2 v2 h-3 v-2 h-2 v2 h-3 v-2 h-2 V9 h1 V8 h-1 V3 h1 Z
+        " fill="none" stroke="#222" stroke-width="1"/>
+        
+        <!-- 目・口・ほっぺ -->
+        <rect x="9" y="10" width="2" height="1" fill="#222"/>
+        <rect x="13" y="10" width="2" height="1" fill="#222"/>
+        <rect x="8" y="11" width="1" height="1" fill="#ff8a80"/>
+        <rect x="15" y="11" width="1" height="1" fill="#ff8a80"/>
+        <rect x="11" y="12" width="2" height="1" fill="#d32f2f"/>
       </svg>
 
-      <!-- 2. 完全新設計！ごろ寝オカン (ひじまくら・ピクセル) -->
+      <!-- 2. ✨完全新設計✨ こっち向きごろ寝オカン (肘つきテレビ鑑賞) -->
       <svg id="okan-lay" viewBox="0 0 24 24" style="width:100%; height:100%; display:none;">
-        <!-- 黒枠（主線） -->
-        <path d="M2 11h2v-2h6v-1h5v1h7v2h1v6h-2v2h-3v-2h-2v2h-3v-2H8v2H5v-2H2v-6z" fill="#222222"/>
-        <!-- ひじまくらの手（肌色） -->
-        <rect x="3" y="13" width="2" height="4" fill="#ffdfc4"/>
-        <!-- 横向きパーマ頭（茶色） -->
-        <path d="M5 9h5v5H5z" fill="#795548"/>
-        <!-- 顔（肌色） -->
-        <rect x="10" y="9" width="4" height="4" fill="#ffdfc4"/>
-        <!-- 寝ている目（横線） -->
-        <rect x="11" y="11" width="2" height="1" fill="#222"/>
-        <!-- ほっぺ（ピンク） -->
-        <rect x="13" y="11" width="1" height="1" fill="#ff8a80"/>
-        <!-- 横たわった体・割烹着（白） -->
-        <path d="M14 10h7v6h-7z" fill="#ffffff"/>
-        <!-- エプロン帯（黄色） -->
-        <rect x="16" y="10" width="1" height="6" fill="#fbc02d"/>
-        <!-- 曲げた足（くの字・肌色） -->
-        <path d="M18 16h2v3h-2z M20 14h2v3h-2z" fill="#ffdfc4"/>
+        <!-- パーマ頭 (茶) -->
+        <rect x="3" y="6" width="8" height="6" fill="#795548"/>
+        <!-- 顔 (正面向き・肌色) -->
+        <rect x="4" y="12" width="7" height="5" fill="#ffdfc4"/>
+        <!-- 肘つき腕 (肌色) -->
+        <path d="M2,18 h3 v-3 h2 v3 Z" fill="#ffdfc4"/>
+        <!-- 横たわった体・割烹着 (白) -->
+        <rect x="10" y="13" width="11" height="6" fill="#ffffff"/>
+        <!-- エプロン帯 (黄) -->
+        <rect x="13" y="13" width="2" height="6" fill="#fbc02d"/>
+        <!-- 曲げた足 (肌色) -->
+        <rect x="20" y="14" width="3" height="3" fill="#ffdfc4"/>
+
+        <!-- 1px細黒枠 (輪郭) -->
+        <path d="
+          M3,6 h8 v1 h1 v4 h-1 v1 h8 v1 h4 v4 h-1 v2 h-11 v-1 h-3 v1 h-4 v-2 h-1 v-5 h1 V7 h-1 Z
+        " fill="none" stroke="#222" stroke-width="1"/>
+
+        <!-- 正面を向いたすやすや目＆頬 -->
+        <line x1="5" y1="14" x2="7" y2="14" stroke="#222" stroke-width="1"/>
+        <line x1="8" y1="14" x2="10" y2="14" stroke="#222" stroke-width="1"/>
+        <rect x="4" y="15" width="1" height="1" fill="#ff8a80"/>
+        <rect x="10" y="15" width="1" height="1" fill="#ff8a80"/>
       </svg>
 
       <!-- 💨 ドット絵おなら雲 -->
