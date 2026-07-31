@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="オカン育成">
 
-<title>オカン育成</title>
+<title>オカン育成（修正版）</title>
 <style>
   body {
     background-color: #1a1a1a;
@@ -59,7 +59,8 @@
     position: absolute;
     width: 80px;
     height: 80px;
-    transition: all 0.2s steps(4), transform 0.2s ease-in-out; /* 移動と回転のアニメーション */
+    /* transitionを整理。pose-layの回転アニメは削除 */
+    transition: left 0.2s steps(4), top 0.2s steps(4); 
     z-index: 10;
   }
 
@@ -69,15 +70,11 @@
   .pos-chabudai-right { top: 85px; right: 5px; }
   .pos-center { top: 60px; left: 32%; }
 
-  /* ★【新規】寝転がりポーズ（立ち姿を90度回転）★ */
-  .okan-container.pose-lay {
-    transform: rotate(90deg); /* 90度右に倒す */
-  }
-
-  /* 寝転がり時の位置微調整（おならや移動先） */
-  .okan-container.pos-chabudai-left.pose-lay {
-    top: 100px; /* 少し下に下げる */
-    left: 20px;  /* 少し右に寄せる */
+  /* オカンのポーズ切り替え（表示/非表示） */
+  #okan-stand, #okan-lay {
+    width: 100%; height: 100%;
+    shape-rendering: crispEdges;
+    display: none; /* 初期は非表示 */
   }
 
   /* おならアニメーション */
@@ -181,35 +178,52 @@
     <!-- 👾 キャラ配置エリア -->
     <div id="okan-container" class="okan-container pos-tv">
       
-      <!-- ★立ち姿オカン (ふわふわ茶髪パーマ) のみ残す★ -->
-      <svg id="okan-stand" viewBox="0 0 32 32" style="width:100%; height:100%; shape-rendering: crispEdges;">
-        <!-- パーマ髪（茶色・モコモコ感） -->
-        <path d="M 10 3 H 22 V 4 H 24 V 6 H 25 V 10 H 24 V 12 H 8 V 10 H 7 V 6 H 8 V 4 H 10 Z" fill="#795548"/>
-        <path d="M 11 4 H 21 V 5 H 23 V 7 H 24 V 9 H 23 V 11 H 9 V 9 H 8 V 7 H 9 V 5 Z" fill="#a1887f"/>
-        
+      <!-- ★【新規修正】立ち姿オカン (添付画像のドット絵デザイン)★ -->
+      <svg id="okan-stand" viewBox="0 0 16 20" style="display: block;">
+        <!-- 髪（ボブ） -->
+        <rect x="4" y="0" width="8" height="1" fill="#8D6E63"/>
+        <rect x="3" y="1" width="10" height="6" fill="#8D6E63"/>
+        <rect x="3" y="7" width="2" height="1" fill="#8D6E63"/>
+        <rect x="11" y="7" width="2" height="1" fill="#8D6E63"/>
         <!-- 顔 -->
-        <rect x="9" y="11" width="14" height="8" fill="#ffdfc4"/>
-        <!-- 目・眉・ほっぺ・口 -->
-        <rect x="11" y="13" width="3" height="1" fill="#222"/>
-        <rect x="18" y="13" width="3" height="1" fill="#222"/>
-        <rect x="10" y="15" width="2" height="1" fill="#ff8a80"/>
-        <rect x="20" y="15" width="2" height="1" fill="#ff8a80"/>
-        <rect x="14" y="17" width="4" height="1" fill="#d32f2f"/>
-
-        <!-- 服（割烹着） -->
-        <rect x="8" y="19" width="16" height="10" fill="#ffffff"/>
-        <!-- 黄色帯 -->
-        <rect x="8" y="22" width="16" height="2" fill="#fbc02d"/>
+        <rect x="5" y="2" width="6" height="7" fill="#FFCCBC"/>
+        <!-- 目 -->
+        <rect x="6" y="4" width="1" height="1" fill="#333333"/>
+        <rect x="9" y="4" width="1" height="1" fill="#333333"/>
+        <!-- 口紅 -->
+        <rect x="7" y="7" width="2" height="1" fill="#FF5252"/>
+        <!-- 体（割烹着） -->
+        <rect x="4" y="9" width="8" height="8" fill="#FFFFFF"/>
+        <!-- 帯（黄色） -->
+        <rect x="4" y="12" width="8" height="2" fill="#FFEB3B"/>
         <!-- 足 -->
-        <rect x="10" y="29" width="3" height="3" fill="#ffdfc4"/>
-        <rect x="19" y="29" width="3" height="3" fill="#ffdfc4"/>
-
-        <!-- 輪郭線 -->
-        <path d="M 10 3 H 22 V 4 H 24 V 6 H 25 V 10 H 24 V 12 H 8 V 10 H 7 V 6 H 8 V 4 Z" 
-              fill="none" stroke="#111" stroke-width="0.8"/>
+        <rect x="5" y="17" width="2" height="3" fill="#FFCCBC"/>
+        <rect x="9" y="17" width="2" height="3" fill="#FFCCBC"/>
+        <!-- 靴 -->
+        <rect x="5" y="19" width="2" height="1" fill="#333333"/>
+        <rect x="9" y="19" width="2" height="1" fill="#333333"/>
       </svg>
 
-      <!-- ★元の `#okan-lay`（ごろ寝ドット絵）は削除しました★ -->
+      <!-- ★【新規追加】画像のデザインに基づいた「ごろ寝ポーズ」★ -->
+      <svg id="okan-lay" viewBox="0 0 20 16">
+        <!-- 髪（横向きボブ） -->
+        <rect x="0" y="4" width="6" height="8" fill="#8D6E63"/>
+        <rect x="1" y="3" width="1" height="1" fill="#8D6E63"/>
+        <rect x="1" y="12" width="1" height="1" fill="#8D6E63"/>
+        <!-- 顔（横向き） -->
+        <rect x="2" y="5" width="7" height="6" fill="#FFCCBC"/>
+        <!-- 目（閉じ目） -->
+        <rect x="5" y="7" width="2" height="1" fill="#333333"/>
+        <!-- 口紅（横） -->
+        <rect x="8" y="7" width="1" height="2" fill="#FF5252"/>
+        <!-- 体（割烹着・横倒し） -->
+        <rect x="9" y="4" width="10" height="8" fill="#FFFFFF"/>
+        <!-- 帯（黄色・縦） -->
+        <rect x="12" y="4" width="2" height="8" fill="#FFEB3B"/>
+        <!-- 足（曲げてる感じ） -->
+        <rect x="17" y="12" width="2" height="2" fill="#FFCCBC"/>
+        <rect x="15" y="11" width="3" height="2" fill="#FFCCBC"/>
+      </svg>
 
       <!-- 💨 ドット絵おなら雲 -->
       <svg id="fart-cloud" class="fart-cloud" viewBox="0 0 16 16" style="shape-rendering: crispEdges;">
@@ -238,12 +252,15 @@
 </div>
 
 <script>
+  // デバッグ用：合言葉なしで進める場合はここをコメントアウト
   const pass = prompt("合言葉を入力してね (初期値: 1234)");
   if(pass === "1234") {
     document.getElementById("game").style.display = "block";
   } else {
     alert("合言葉が違います！");
+    // 本番はここでリロードなど
   }
+  // document.getElementById("game").style.display = "block"; // デバッグ用
 
   let mood = 40;
   let weight = 55.0;
@@ -262,15 +279,17 @@
     { pos: "pos-center", pose: "stand", text: "畳の上でぼーっとしている", state: "休憩中" }
   ];
 
-  /* ★【修正】JavaScriptのポーズ切り替え関数★ */
+  /* ★【修正】JavaScriptのポーズ切り替え関数（表示/非表示を切り替える方式に変更）★ */
   function setPose(poseType) {
-    const container = document.getElementById("okan-container");
-    // 元のSVG表示切り替えロジックは削除
+    const standSvg = document.getElementById("okan-stand");
+    const laySvg = document.getElementById("okan-lay");
     
     if(poseType === "stand") {
-      container.classList.remove("pose-lay"); // 通常（立ち姿）
+      standSvg.style.display = "block";
+      laySvg.style.display = "none";
     } else {
-      container.classList.add("pose-lay");    // 寝転がり（CSSで90度回転）
+      standSvg.style.display = "none";
+      laySvg.style.display = "block";
     }
   }
 
@@ -300,8 +319,9 @@
       const container = document.getElementById("okan-container");
       const fart = document.getElementById("fart-cloud");
 
-      // 横倒しで座布団へ
+      // ちゃぶ台横へ移動
       container.className = "okan-container pos-chabudai-left";
+      // 寝転がりポーズに
       setPose("lay");
 
       setTimeout(() => {
@@ -313,8 +333,6 @@
       setTimeout(() => {
         fart.className = "fart-cloud";
         isBusy = false;
-        // おなら終わったら自動で立ち姿に戻る（任意）
-        // setPose("stand");
       }, 3200);
       return true;
     }
@@ -339,7 +357,7 @@
     const container = document.getElementById("okan-container");
     // ちゃぶ台横へ移動
     container.className = "okan-container pos-chabudai-left";
-    // ★横倒しポーズにする★
+    // ★横倒しポーズ（新しいSVG）にする★
     setPose("lay");
     document.getElementById("dialogue").innerText = "寝っ転がって食べるおせんべいが最高";
     document.getElementById("state-val").innerText = "寝ながら間食";
