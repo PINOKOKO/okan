@@ -5,9 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="オカン育成">
+<meta name="apple-mobile-web-app-title" content="オカンといっしょ">
 
-<title>オカン育成</title>
+<title>オカンいっしょ</title>
 <style>
   body {
     background-color: #1a1a1a;
@@ -37,42 +37,42 @@
 
   /* 液晶画面枠 */
   .screen {
-    background-color: #8bac0f;
-    border: 4px solid #0f380f;
+    background-color: #bce0a8;
+    border: 4px solid #2d481e;
     height: 230px;
     margin-bottom: 12px;
     border-radius: 10px;
     position: relative;
     overflow: hidden;
-    box-shadow: inset 3px 3px 8px rgba(0,0,0,0.4);
+    box-shadow: inset 3px 3px 8px rgba(0,0,0,0.3);
   }
 
   /* 居間の静止画背景 */
   .room-svg {
     position: absolute;
     top: 0; left: 0; width: 100%; height: 195px;
-    opacity: 0.8;
+    opacity: 0.85;
   }
 
-  /* --- SVGオカンの配置スタイル --- */
+  /* --- キャラ配置エリア --- */
   .okan-container {
     position: absolute;
-    width: 56px;
-    height: 56px;
+    width: 64px;
+    height: 64px;
     transition: all 0.2s steps(4);
     z-index: 10;
   }
 
-  /* 位置設定 */
-  .pos-tv { top: 65px; right: 20px; }
-  .pos-chabudai-left { top: 100px; left: 10px; }
-  .pos-chabudai-right { top: 100px; right: 20px; }
-  .pos-center { top: 75px; left: 38%; }
+  /* 位置（ちゃぶ台やテレビに合わせて配置） */
+  .pos-tv { top: 60px; right: 15px; }
+  .pos-chabudai-left { top: 95px; left: 10px; }
+  .pos-chabudai-right { top: 95px; right: 15px; }
+  .pos-center { top: 70px; left: 36%; }
 
-  /* ⭐ おならのポップなアニメーション ⭐ */
+  /* ⭐ ドットおならアニメーション ⭐ */
   .fart-cloud {
     position: absolute;
-    top: 25px; right: -15px;
+    top: 32px; right: -12px;
     width: 24px; height: 24px;
     opacity: 0;
     z-index: 15;
@@ -83,16 +83,16 @@
   }
 
   @keyframes fart-pop {
-    0% { opacity: 0; transform: scale(0.5) translate(0, 0); }
-    50% { opacity: 1; transform: scale(1.1) translate(5px, -5px); }
-    100% { opacity: 0; transform: scale(1.4) translate(10px, -10px); }
+    0% { opacity: 0; transform: scale(0.6) translate(0, 0); }
+    50% { opacity: 1; transform: scale(1.1) translate(6px, -4px); }
+    100% { opacity: 0; transform: scale(1.3) translate(12px, -8px); }
   }
 
   /* 掃除アニメーション */
   @keyframes clean-dq {
-    0% { left: 10px; top: 100px; transform: scaleX(1); }
-    50% { left: 200px; top: 75px; transform: scaleX(-1); }
-    100% { left: 10px; top: 100px; transform: scaleX(1); }
+    0% { left: 10px; top: 95px; transform: scaleX(1); }
+    50% { left: 190px; top: 70px; transform: scaleX(-1); }
+    100% { left: 10px; top: 95px; transform: scaleX(1); }
   }
   .anim-cleaning {
     animation: clean-dq 3s infinite steps(6) !important;
@@ -101,10 +101,10 @@
   .dialogue-box {
     position: absolute; bottom: 0; left: 0; right: 0;
     height: 35px;
-    background: #8bac0f;
-    border-top: 3px solid #0f380f;
+    background: #bce0a8;
+    border-top: 3px solid #2d481e;
     font-size: 11px; font-weight: bold;
-    color: #0f380f;
+    color: #1a330e;
     display: flex; align-items: center; justify-content: center;
     padding: 0 5px;
   }
@@ -133,86 +133,95 @@
     
     <!-- 🖼️ 昭和の居間 背景 -->
     <svg class="room-svg" viewBox="0 0 200 160" xmlns="http://www.w3.org/2000/svg">
-      <rect x="0" y="0" width="200" height="110" fill="#789c0a"/>
-      <line x1="0" y1="30" x2="200" y2="30" stroke="#0f380f" stroke-width="1" opacity="0.3"/>
-      <line x1="0" y1="70" x2="200" y2="70" stroke="#0f380f" stroke-width="1" opacity="0.3"/>
+      <rect x="0" y="0" width="200" height="110" fill="#a3c98f"/>
+      <line x1="0" y1="30" x2="200" y2="30" stroke="#2d481e" stroke-width="1" opacity="0.3"/>
+      <line x1="0" y1="70" x2="200" y2="70" stroke="#2d481e" stroke-width="1" opacity="0.3"/>
       
-      <circle cx="30" cy="40" r="18" fill="none" stroke="#0f380f" stroke-width="2"/>
-      <line x1="30" y1="22" x2="30" y2="58" stroke="#0f380f" stroke-width="1"/>
-      <line x1="12" y1="40" x2="48" y2="40" stroke="#0f380f" stroke-width="1"/>
+      <circle cx="30" cy="40" r="18" fill="none" stroke="#2d481e" stroke-width="2"/>
+      <line x1="30" y1="22" x2="30" y2="58" stroke="#2d481e" stroke-width="1"/>
+      <line x1="12" y1="40" x2="48" y2="40" stroke="#2d481e" stroke-width="1"/>
 
-      <rect x="85" y="10" width="30" height="50" fill="none" stroke="#0f380f" stroke-width="1.5"/>
-      <rect x="90" y="18" width="20" height="34" fill="#0f380f" opacity="0.15"/>
-      <text x="94" y="38" font-size="8" fill="#0f380f" font-weight="bold">富士</text>
+      <rect x="85" y="10" width="30" height="50" fill="none" stroke="#2d481e" stroke-width="1.5"/>
+      <rect x="90" y="18" width="20" height="34" fill="#2d481e" opacity="0.15"/>
+      <text x="94" y="38" font-size="8" fill="#2d481e" font-weight="bold">富士</text>
 
-      <rect x="150" y="35" width="40" height="30" rx="3" fill="none" stroke="#0f380f" stroke-width="2"/>
-      <rect x="154" y="39" width="24" height="22" rx="2" fill="#0f380f" opacity="0.2"/>
-      <circle cx="183" cy="44" r="2" fill="#0f380f"/>
-      <circle cx="183" cy="52" r="2" fill="#0f380f"/>
-      <line x1="160" y1="35" x2="152" y2="20" stroke="#0f380f" stroke-width="1.5"/>
-      <line x1="170" y1="35" x2="178" y2="20" stroke="#0f380f" stroke-width="1.5"/>
-      <line x1="156" y1="65" x2="152" y2="72" stroke="#0f380f" stroke-width="2"/>
-      <line x1="184" y1="65" x2="188" y2="72" stroke="#0f380f" stroke-width="2"/>
+      <rect x="150" y="35" width="40" height="30" rx="3" fill="#3a5a28" stroke="#2d481e" stroke-width="2"/>
+      <rect x="154" y="39" width="24" height="22" rx="2" fill="#88af74"/>
+      <circle cx="183" cy="44" r="2" fill="#2d481e"/>
+      <circle cx="183" cy="52" r="2" fill="#2d481e"/>
+      <line x1="160" y1="35" x2="152" y2="20" stroke="#2d481e" stroke-width="1.5"/>
+      <line x1="170" y1="35" x2="178" y2="20" stroke="#2d481e" stroke-width="1.5"/>
+      <line x1="156" y1="65" x2="152" y2="72" stroke="#2d481e" stroke-width="2"/>
+      <line x1="184" y1="65" x2="188" y2="72" stroke="#2d481e" stroke-width="2"/>
 
-      <rect x="0" y="110" width="200" height="50" fill="#6b8c08"/>
-      <line x1="0" y1="110" x2="200" y2="110" stroke="#0f380f" stroke-width="2"/>
-      <line x1="0" y1="135" x2="200" y2="135" stroke="#0f380f" stroke-width="3" stroke-dasharray="8,4"/>
-      <line x1="100" y1="110" x2="100" y2="135" stroke="#0f380f" stroke-width="1.5"/>
+      <rect x="0" y="110" width="200" height="50" fill="#88af74"/>
+      <line x1="0" y1="110" x2="200" y2="110" stroke="#2d481e" stroke-width="2"/>
+      <line x1="0" y1="135" x2="200" y2="135" stroke="#2d481e" stroke-width="3" stroke-dasharray="8,4"/>
+      <line x1="100" y1="110" x2="100" y2="135" stroke="#2d481e" stroke-width="1.5"/>
 
-      <ellipse cx="100" cy="125" rx="40" ry="12" fill="#8bac0f" stroke="#0f380f" stroke-width="2"/>
-      <line x1="70" y1="133" x2="68" y2="142" stroke="#0f380f" stroke-width="2"/>
-      <line x1="130" y1="133" x2="132" y2="142" stroke="#0f380f" stroke-width="2"/>
-      <rect x="92" y="115" width="8" height="6" rx="1" fill="#0f380f"/>
-      <path d="M 100 118 Q 104 117 103 121" fill="none" stroke="#0f380f" stroke-width="1"/>
-      <rect x="106" y="117" width="4" height="4" fill="#0f380f"/>
+      <ellipse cx="100" cy="125" rx="40" ry="12" fill="#bce0a8" stroke="#2d481e" stroke-width="2"/>
+      <line x1="70" y1="133" x2="68" y2="142" stroke="#2d481e" stroke-width="2"/>
+      <line x1="130" y1="133" x2="132" y2="142" stroke="#2d481e" stroke-width="2"/>
+      <rect x="92" y="115" width="8" height="6" rx="1" fill="#2d481e"/>
+      <path d="M 100 118 Q 104 117 103 121" fill="none" stroke="#2d481e" stroke-width="1"/>
+      <rect x="106" y="117" width="4" height="4" fill="#2d481e"/>
     </svg>
 
-    <!-- 👾 主線くっきり！SVGオカン -->
+    <!-- 👾 精巧24x24ピクセルアート・オカン -->
     <div id="okan-container" class="okan-container pos-tv">
-      <!-- 立ちポーズオカン -->
+      
+      <!-- 1. 立ち姿オカン (グリッドピクセル) -->
       <svg id="okan-stand" viewBox="0 0 24 24" style="width:100%; height:100%;">
-        <!-- 白塗りつぶし下地 -->
-        <path d="M6,4 h12 v18 h-12 z" fill="#e0f8d0" />
-        <!-- パーマ髪（黒塗り） -->
-        <path d="M6,3 h12 v6 h-12 z" fill="#0f380f" />
-        <!-- 顔（白） -->
-        <rect x="6" y="7" width="12" height="6" fill="#e0f8d0"/>
-        <!-- 輪郭＆目口（くっきり黒線） -->
-        <path d="
-          M6,2 h12 v1 h2 v2 h1 v4 h-1 v1 h1 v11 h-2 v2 h-3 v-2 h-4 v2 h-3 v-2 h-2 V10 h1 V9 h-1 V5 h1 V3 z
-        " fill="none" stroke="#0f380f" stroke-width="1.2" />
+        <!-- 黒枠（主線） -->
+        <path d="M7 2h10v1h2v2h1v5h-1v1h1v10h-2v2h-3v-2h-2v2h-3v-2h-2v-10h1v-1h-1V5h1V3h2V2z" fill="#222222"/>
+        <!-- パーマ髪（茶色） -->
+        <path d="M8 3h8v2h2v4h-2V8H8v1H6V5h2V3z" fill="#795548"/>
+        <!-- 肌（顔） -->
+        <rect x="8" y="8" width="8" height="5" fill="#ffdfc4"/>
         <!-- にっこり目 -->
-        <rect x="8" y="9" width="2" height="2" fill="#0f380f"/>
-        <rect x="14" y="9" width="2" height="2" fill="#0f380f"/>
-        <!-- にっこり口 -->
-        <path d="M10,12 h4" stroke="#0f380f" stroke-width="1"/>
-        <!-- 割烹着のエプロンライン -->
-        <path d="M8,14 v5 M16,14 v5" stroke="#0f380f" stroke-width="1"/>
+        <rect x="9" y="10" width="2" height="1" fill="#222"/>
+        <rect x="13" y="10" width="2" height="1" fill="#222"/>
+        <!-- ほっぺた（ピンク） -->
+        <rect x="8" y="11" width="1" height="1" fill="#ff8a80"/>
+        <rect x="15" y="11" width="1" height="1" fill="#ff8a80"/>
+        <!-- 口 -->
+        <rect x="11" y="12" width="2" height="1" fill="#d32f2f"/>
+        <!-- 割烹着（白） -->
+        <path d="M7 13h10v7H7z" fill="#ffffff"/>
+        <!-- エプロン帯（黄色） -->
+        <rect x="7" y="15" width="10" height="1" fill="#fbc02d"/>
+        <!-- 脚 -->
+        <rect x="8" y="20" width="2" height="2" fill="#ffdfc4"/>
+        <rect x="14" y="20" width="2" height="2" fill="#ffdfc4"/>
       </svg>
 
-      <!-- ごろ寝オカン (ひじまくら・主線くっきり) -->
+      <!-- 2. 完全新設計！ごろ寝オカン (ひじまくら・ピクセル) -->
       <svg id="okan-lay" viewBox="0 0 24 24" style="width:100%; height:100%; display:none;">
-        <!-- 白塗りつぶし下地 -->
-        <path d="M2,8 h20 v12 h-20 z" fill="#e0f8d0" />
-        <!-- 太い主線と輪郭 -->
-        <path d="
-          M3,12 v-3 h5 v-2 h4 v2 h10 v8 h-3 v3 h-3 v-3 h-8 v-2 h-2 v-3 z
-        " fill="none" stroke="#0f380f" stroke-width="1.2" />
-        <!-- 横向きパーマ頭 -->
-        <path d="M3,9 h5 v6 h-5 z" fill="#0f380f"/>
-        <!-- 顔（白）とすやすや目 -->
-        <rect x="7" y="10" width="5" height="4" fill="#e0f8d0"/>
-        <line x1="8" y1="12" x2="10" y2="12" stroke="#0f380f" stroke-width="1.2"/>
-        <!-- ひじまくら（腕） -->
-        <path d="M2,15 L6,12 L8,15" fill="none" stroke="#0f380f" stroke-width="1.5"/>
-        <!-- 曲げた足 -->
-        <path d="M18,14 L21,11 L22,15" fill="none" stroke="#0f380f" stroke-width="1.5"/>
+        <!-- 黒枠（主線） -->
+        <path d="M2 11h2v-2h6v-1h5v1h7v2h1v6h-2v2h-3v-2h-2v2h-3v-2H8v2H5v-2H2v-6z" fill="#222222"/>
+        <!-- ひじまくらの手（肌色） -->
+        <rect x="3" y="13" width="2" height="4" fill="#ffdfc4"/>
+        <!-- 横向きパーマ頭（茶色） -->
+        <path d="M5 9h5v5H5z" fill="#795548"/>
+        <!-- 顔（肌色） -->
+        <rect x="10" y="9" width="4" height="4" fill="#ffdfc4"/>
+        <!-- 寝ている目（横線） -->
+        <rect x="11" y="11" width="2" height="1" fill="#222"/>
+        <!-- ほっぺ（ピンク） -->
+        <rect x="13" y="11" width="1" height="1" fill="#ff8a80"/>
+        <!-- 横たわった体・割烹着（白） -->
+        <path d="M14 10h7v6h-7z" fill="#ffffff"/>
+        <!-- エプロン帯（黄色） -->
+        <rect x="16" y="10" width="1" height="6" fill="#fbc02d"/>
+        <!-- 曲げた足（くの字・肌色） -->
+        <path d="M18 16h2v3h-2z M20 14h2v3h-2z" fill="#ffdfc4"/>
       </svg>
 
-      <!-- 💨 くっきりドットおなら -->
+      <!-- 💨 ドット絵おなら雲 -->
       <svg id="fart-cloud" class="fart-cloud" viewBox="0 0 16 16">
-        <path d="M3,8 Q1,4 6,3 Q10,1 13,5 Q16,9 11,12 Q7,15 3,8 Z" fill="#e0f8d0" stroke="#0f380f" stroke-width="1.5"/>
-        <circle cx="4" cy="11" r="1.5" fill="#0f380f"/>
+        <path d="M4 6h8v1h2v2h-1v2h-2v1H5v-1H3v-2H2V7h2V6z" fill="#ffffff" stroke="#222" stroke-width="1"/>
+        <circle cx="3" cy="12" r="1" fill="#222"/>
+        <circle cx="1" cy="14" r="0.8" fill="#222"/>
       </svg>
     </div>
 
