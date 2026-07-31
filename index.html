@@ -5,15 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="オカンといっしょ">
+<meta name="apple-mobile-web-app-title" content="オカン育成">
 
-<title>オカンといっしょ</title>
+<title>オカン育成</title>
 <style>
-  :root {
-    --pixel-color: #0f380f; /* オカンのドット色（濃い緑黒） */
-    --p-size: 2px; /* ドットの1ピクセルサイズ */
-  }
-
   body {
     background-color: #1a1a1a;
     color: #fff;
@@ -52,126 +47,52 @@
     box-shadow: inset 3px 3px 8px rgba(0,0,0,0.4);
   }
 
-  /* --- 居間の静止画背景（SVGイラスト） --- */
+  /* 居間の静止画背景 */
   .room-svg {
     position: absolute;
     top: 0; left: 0; width: 100%; height: 195px;
-    opacity: 0.85; /* うっすら背景にしてドットオカンを目立たせる */
+    opacity: 0.8;
   }
 
-  /* -------------------------------------
-     解像度アップ！24x24マス ドット絵オカン
-  ------------------------------------- */
-  .okan-pixel {
+  /* --- SVGオカンの配置スタイル --- */
+  .okan-container {
     position: absolute;
-    width: calc(var(--p-size) * 24);
-    height: calc(var(--p-size) * 24);
+    width: 56px;
+    height: 56px;
     transition: all 0.2s steps(4);
     z-index: 10;
   }
 
-  .okan-pixel::after {
-    content: ''; position: absolute;
-    width: var(--p-size); height: var(--p-size);
-    background: transparent;
-  }
+  /* 位置設定 */
+  .pos-tv { top: 65px; right: 20px; }
+  .pos-chabudai-left { top: 100px; left: 10px; }
+  .pos-chabudai-right { top: 100px; right: 20px; }
+  .pos-center { top: 75px; left: 38%; }
 
-  /* --- 高精細：立ち姿オカン (パーマ・ニコニコ顔・割烹着) --- */
-  .pose-stand::after {
-    box-shadow: 
-      /* パーマ髪 */
-      calc(var(--p-size)*8) calc(var(--p-size)*1) var(--pixel-color), calc(var(--p-size)*9) calc(var(--p-size)*1) var(--pixel-color), calc(var(--p-size)*10) calc(var(--p-size)*1) var(--pixel-color), calc(var(--p-size)*11) calc(var(--p-size)*1) var(--pixel-color), calc(var(--p-size)*12) calc(var(--p-size)*1) var(--pixel-color), calc(var(--p-size)*13) calc(var(--p-size)*1) var(--pixel-color), calc(var(--p-size)*14) calc(var(--p-size)*1) var(--pixel-color), calc(var(--p-size)*15) calc(var(--p-size)*1) var(--pixel-color),
-      calc(var(--p-size)*6) calc(var(--p-size)*2) var(--pixel-color), calc(var(--p-size)*7) calc(var(--p-size)*2) var(--pixel-color), calc(var(--p-size)*16) calc(var(--p-size)*2) var(--pixel-color), calc(var(--p-size)*17) calc(var(--p-size)*2) var(--pixel-color),
-      calc(var(--p-size)*5) calc(var(--p-size)*3) var(--pixel-color), calc(var(--p-size)*18) calc(var(--p-size)*3) var(--pixel-color),
-      calc(var(--p-size)*4) calc(var(--p-size)*4) var(--pixel-color), calc(var(--p-size)*19) calc(var(--p-size)*4) var(--pixel-color),
-      calc(var(--p-size)*4) calc(var(--p-size)*5) var(--pixel-color), calc(var(--p-size)*19) calc(var(--p-size)*5) var(--pixel-color),
-      calc(var(--p-size)*5) calc(var(--p-size)*6) var(--pixel-color), calc(var(--p-size)*18) calc(var(--p-size)*6) var(--pixel-color),
-      /* 顔・可愛い表情 */
-      calc(var(--p-size)*7) calc(var(--p-size)*7) var(--pixel-color), calc(var(--p-size)*8) calc(var(--p-size)*7) var(--pixel-color), calc(var(--p-size)*15) calc(var(--p-size)*7) var(--pixel-color), calc(var(--p-size)*16) calc(var(--p-size)*7) var(--pixel-color), /* 目(ニッコリ) */
-      calc(var(--p-size)*6) calc(var(--p-size)*8) var(--pixel-color), calc(var(--p-size)*9) calc(var(--p-size)*8) var(--pixel-color), calc(var(--p-size)*14) calc(var(--p-size)*8) var(--pixel-color), calc(var(--p-size)*17) calc(var(--p-size)*8) var(--pixel-color),
-      calc(var(--p-size)*11) calc(var(--p-size)*10) var(--pixel-color), calc(var(--p-size)*12) calc(var(--p-size)*10) var(--pixel-color), /* にっこり口 */
-      calc(var(--p-size)*10) calc(var(--p-size)*11) var(--pixel-color), calc(var(--p-size)*13) calc(var(--p-size)*11) var(--pixel-color),
-      /* 割烹着（フリル・結び目） */
-      calc(var(--p-size)*7) calc(var(--p-size)*13) var(--pixel-color), calc(var(--p-size)*8) calc(var(--p-size)*13) var(--pixel-color), calc(var(--p-size)*15) calc(var(--p-size)*13) var(--pixel-color), calc(var(--p-size)*16) calc(var(--p-size)*13) var(--pixel-color),
-      calc(var(--p-size)*5) calc(var(--p-size)*14) var(--pixel-color), calc(var(--p-size)*18) calc(var(--p-size)*14) var(--pixel-color),
-      calc(var(--p-size)*4) calc(var(--p-size)*15) var(--pixel-color), calc(var(--p-size)*19) calc(var(--p-size)*15) var(--pixel-color),
-      calc(var(--p-size)*4) calc(var(--p-size)*18) var(--pixel-color), calc(var(--p-size)*19) calc(var(--p-size)*18) var(--pixel-color),
-      calc(var(--p-size)*5) calc(var(--p-size)*19) var(--pixel-color), calc(var(--p-size)*6) calc(var(--p-size)*19) var(--pixel-color), calc(var(--p-size)*17) calc(var(--p-size)*19) var(--pixel-color), calc(var(--p-size)*18) calc(var(--p-size)*19) var(--pixel-color), /* 裾 */
-      /* 足 */
-      calc(var(--p-size)*7) calc(var(--p-size)*20) var(--pixel-color), calc(var(--p-size)*8) calc(var(--p-size)*20) var(--pixel-color), calc(var(--p-size)*15) calc(var(--p-size)*20) var(--pixel-color), calc(var(--p-size)*16) calc(var(--p-size)*20) var(--pixel-color),
-      calc(var(--p-size)*6) calc(var(--p-size)*21) var(--pixel-color), calc(var(--p-size)*7) calc(var(--p-size)*21) var(--pixel-color), calc(var(--p-size)*8) calc(var(--p-size)*21) var(--pixel-color), calc(var(--p-size)*15) calc(var(--p-size)*21) var(--pixel-color), calc(var(--p-size)*16) calc(var(--p-size)*21) var(--pixel-color), calc(var(--p-size)*17) calc(var(--p-size)*21) var(--pixel-color)
-    ;
-  }
-
-  /* --- 高精細：ひじまくら・ごろ寝オカン --- */
-  .pose-lay::after {
-    box-shadow: 
-      /* ひじまくらの手 */
-      calc(var(--p-size)*2) calc(var(--p-size)*12) var(--pixel-color), calc(var(--p-size)*3) calc(var(--p-size)*13) var(--pixel-color), calc(var(--p-size)*4) calc(var(--p-size)*14) var(--pixel-color), calc(var(--p-size)*5) calc(var(--p-size)*15) var(--pixel-color),
-      /* 頭 (パーマ) */
-      calc(var(--p-size)*4) calc(var(--p-size)*7) var(--pixel-color), calc(var(--p-size)*5) calc(var(--p-size)*6) var(--pixel-color), calc(var(--p-size)*6) calc(var(--p-size)*5) var(--pixel-color), calc(var(--p-size)*7) calc(var(--p-size)*5) var(--pixel-color), calc(var(--p-size)*8) calc(var(--p-size)*5) var(--pixel-color),
-      calc(var(--p-size)*3) calc(var(--p-size)*8) var(--pixel-color), calc(var(--p-size)*3) calc(var(--p-size)*9) var(--pixel-color), calc(var(--p-size)*3) calc(var(--p-size)*10) var(--pixel-color),
-      /* 顔 (寝ている目) */
-      calc(var(--p-size)*6) calc(var(--p-size)*9) var(--pixel-color), calc(var(--p-size)*7) calc(var(--p-size)*9) var(--pixel-color), calc(var(--p-size)*8) calc(var(--p-size)*9) var(--pixel-color),
-      /* 横たわった体（割烹着） */
-      calc(var(--p-size)*9) calc(var(--p-size)*11) var(--pixel-color), calc(var(--p-size)*10) calc(var(--p-size)*11) var(--pixel-color), calc(var(--p-size)*11) calc(var(--p-size)*11) var(--pixel-color), calc(var(--p-size)*12) calc(var(--p-size)*11) var(--pixel-color), calc(var(--p-size)*13) calc(var(--p-size)*11) var(--pixel-color), calc(var(--p-size)*14) calc(var(--p-size)*11) var(--pixel-color), calc(var(--p-size)*15) calc(var(--p-size)*11) var(--pixel-color),
-      calc(var(--p-size)*8) calc(var(--p-size)*16) var(--pixel-color), calc(var(--p-size)*9) calc(var(--p-size)*16) var(--pixel-color), calc(var(--p-size)*10) calc(var(--p-size)*16) var(--pixel-color), calc(var(--p-size)*11) calc(var(--p-size)*16) var(--pixel-color), calc(var(--p-size)*12) calc(var(--p-size)*16) var(--pixel-color), calc(var(--p-size)*13) calc(var(--p-size)*16) var(--pixel-color), calc(var(--p-size)*14) calc(var(--p-size)*16) var(--pixel-color), calc(var(--p-size)*15) calc(var(--p-size)*16) var(--pixel-color),
-      /* 曲げた足 */
-      calc(var(--p-size)*16) calc(var(--p-size)*12) var(--pixel-color), calc(var(--p-size)*17) calc(var(--p-size)*13) var(--pixel-color), calc(var(--p-size)*18) calc(var(--p-size)*14) var(--pixel-color),
-      calc(var(--p-size)*16) calc(var(--p-size)*15) var(--pixel-color), calc(var(--p-size)*17) calc(var(--p-size)*16) var(--pixel-color)
-    ;
-  }
-
-  /* 位置関係（ちゃぶ台やテレビに合わせて最適化） */
-  .pos-tv { top: 75px; right: 20px; }
-  .pos-chabudai-left { top: 110px; left: 15px; }
-  .pos-chabudai-right { top: 110px; right: 25px; }
-  .pos-center { top: 85px; left: 38%; }
-
-  /* ⭐ おならアニメーション (吹き出しドット) ⭐ */
-  .fart-pixel {
+  /* ⭐ おならのポップなアニメーション ⭐ */
+  .fart-cloud {
     position: absolute;
-    width: var(--p-size); height: var(--p-size);
-    background: transparent;
+    top: 25px; right: -15px;
+    width: 24px; height: 24px;
     opacity: 0;
     z-index: 15;
   }
-  
-  .pos-chabudai-left .fart-pixel {
-    top: calc(var(--p-size) * 12);
-    right: calc(var(--p-size) * -2);
-  }
 
   .fart-active {
-    animation: fart-puff 1.2s steps(3) infinite;
+    animation: fart-pop 1s steps(3) infinite;
   }
 
-  @keyframes fart-puff {
-    0% {
-      opacity: 1;
-      box-shadow: calc(var(--p-size)*0) calc(var(--p-size)*0) var(--pixel-color);
-    }
-    50% {
-      opacity: 1;
-      box-shadow: 
-        calc(var(--p-size)*1) calc(var(--p-size)*-2) var(--pixel-color), calc(var(--p-size)*2) calc(var(--p-size)*-2) var(--pixel-color),
-        calc(var(--p-size)*0) calc(var(--p-size)*0) var(--pixel-color), calc(var(--p-size)*3) calc(var(--p-size)*0) var(--pixel-color),
-        calc(var(--p-size)*1) calc(var(--p-size)*2) var(--pixel-color), calc(var(--p-size)*2) calc(var(--p-size)*2) var(--pixel-color);
-    }
-    100% {
-      opacity: 0;
-      box-shadow: 
-        calc(var(--p-size)*3) calc(var(--p-size)*-3) var(--pixel-color), calc(var(--p-size)*4) calc(var(--p-size)*-3) var(--pixel-color),
-        calc(var(--p-size)*2) calc(var(--p-size)*0) var(--pixel-color), calc(var(--p-size)*5) calc(var(--p-size)*0) var(--pixel-color),
-        calc(var(--p-size)*3) calc(var(--p-size)*3) var(--pixel-color), calc(var(--p-size)*4) calc(var(--p-size)*3) var(--pixel-color);
-    }
+  @keyframes fart-pop {
+    0% { opacity: 0; transform: scale(0.5) translate(0, 0); }
+    50% { opacity: 1; transform: scale(1.1) translate(5px, -5px); }
+    100% { opacity: 0; transform: scale(1.4) translate(10px, -10px); }
   }
 
-  /* ドラクエ風掃除アニメ */
+  /* 掃除アニメーション */
   @keyframes clean-dq {
-    0% { left: 10px; top: 110px; transform: scaleX(1); }
-    50% { left: 200px; top: 80px; transform: scaleX(-1); }
-    100% { left: 10px; top: 110px; transform: scaleX(1); }
+    0% { left: 10px; top: 100px; transform: scaleX(1); }
+    50% { left: 200px; top: 75px; transform: scaleX(-1); }
+    100% { left: 10px; top: 100px; transform: scaleX(1); }
   }
   .anim-cleaning {
     animation: clean-dq 3s infinite steps(6) !important;
@@ -210,14 +131,12 @@
 <div class="game-container" id="game" style="display:none;">
   <div class="screen">
     
-    <!-- 🖼️ 昭和の居間（静止画SVGイラスト背景） -->
+    <!-- 🖼️ 昭和の居間 背景 -->
     <svg class="room-svg" viewBox="0 0 200 160" xmlns="http://www.w3.org/2000/svg">
-      <!-- 障子風の壁背景 -->
       <rect x="0" y="0" width="200" height="110" fill="#789c0a"/>
       <line x1="0" y1="30" x2="200" y2="30" stroke="#0f380f" stroke-width="1" opacity="0.3"/>
       <line x1="0" y1="70" x2="200" y2="70" stroke="#0f380f" stroke-width="1" opacity="0.3"/>
       
-      <!-- 丸窓と床の間（掛け軸） -->
       <circle cx="30" cy="40" r="18" fill="none" stroke="#0f380f" stroke-width="2"/>
       <line x1="30" y1="22" x2="30" y2="58" stroke="#0f380f" stroke-width="1"/>
       <line x1="12" y1="40" x2="48" y2="40" stroke="#0f380f" stroke-width="1"/>
@@ -226,7 +145,6 @@
       <rect x="90" y="18" width="20" height="34" fill="#0f380f" opacity="0.15"/>
       <text x="94" y="38" font-size="8" fill="#0f380f" font-weight="bold">富士</text>
 
-      <!-- 昭和テレビ（右奥） -->
       <rect x="150" y="35" width="40" height="30" rx="3" fill="none" stroke="#0f380f" stroke-width="2"/>
       <rect x="154" y="39" width="24" height="22" rx="2" fill="#0f380f" opacity="0.2"/>
       <circle cx="183" cy="44" r="2" fill="#0f380f"/>
@@ -236,26 +154,66 @@
       <line x1="156" y1="65" x2="152" y2="72" stroke="#0f380f" stroke-width="2"/>
       <line x1="184" y1="65" x2="188" y2="72" stroke="#0f380f" stroke-width="2"/>
 
-      <!-- 畳（たたみ）の床 -->
       <rect x="0" y="110" width="200" height="50" fill="#6b8c08"/>
       <line x1="0" y1="110" x2="200" y2="110" stroke="#0f380f" stroke-width="2"/>
-      <!-- 畳の縁（へり） -->
       <line x1="0" y1="135" x2="200" y2="135" stroke="#0f380f" stroke-width="3" stroke-dasharray="8,4"/>
       <line x1="100" y1="110" x2="100" y2="135" stroke="#0f380f" stroke-width="1.5"/>
 
-      <!-- 中央のちゃぶ台（急須と湯呑み） -->
       <ellipse cx="100" cy="125" rx="40" ry="12" fill="#8bac0f" stroke="#0f380f" stroke-width="2"/>
       <line x1="70" y1="133" x2="68" y2="142" stroke="#0f380f" stroke-width="2"/>
       <line x1="130" y1="133" x2="132" y2="142" stroke="#0f380f" stroke-width="2"/>
-      <!-- 急須と湯呑み -->
       <rect x="92" y="115" width="8" height="6" rx="1" fill="#0f380f"/>
       <path d="M 100 118 Q 104 117 103 121" fill="none" stroke="#0f380f" stroke-width="1"/>
       <rect x="106" y="117" width="4" height="4" fill="#0f380f"/>
     </svg>
 
-    <!-- 👾 解像度アップしたドット絵オカン -->
-    <div id="okan-container" class="okan-pixel pos-tv pose-stand">
-      <div id="fart-pixel" class="fart-pixel"></div>
+    <!-- 👾 主線くっきり！SVGオカン -->
+    <div id="okan-container" class="okan-container pos-tv">
+      <!-- 立ちポーズオカン -->
+      <svg id="okan-stand" viewBox="0 0 24 24" style="width:100%; height:100%;">
+        <!-- 白塗りつぶし下地 -->
+        <path d="M6,4 h12 v18 h-12 z" fill="#e0f8d0" />
+        <!-- パーマ髪（黒塗り） -->
+        <path d="M6,3 h12 v6 h-12 z" fill="#0f380f" />
+        <!-- 顔（白） -->
+        <rect x="6" y="7" width="12" height="6" fill="#e0f8d0"/>
+        <!-- 輪郭＆目口（くっきり黒線） -->
+        <path d="
+          M6,2 h12 v1 h2 v2 h1 v4 h-1 v1 h1 v11 h-2 v2 h-3 v-2 h-4 v2 h-3 v-2 h-2 V10 h1 V9 h-1 V5 h1 V3 z
+        " fill="none" stroke="#0f380f" stroke-width="1.2" />
+        <!-- にっこり目 -->
+        <rect x="8" y="9" width="2" height="2" fill="#0f380f"/>
+        <rect x="14" y="9" width="2" height="2" fill="#0f380f"/>
+        <!-- にっこり口 -->
+        <path d="M10,12 h4" stroke="#0f380f" stroke-width="1"/>
+        <!-- 割烹着のエプロンライン -->
+        <path d="M8,14 v5 M16,14 v5" stroke="#0f380f" stroke-width="1"/>
+      </svg>
+
+      <!-- ごろ寝オカン (ひじまくら・主線くっきり) -->
+      <svg id="okan-lay" viewBox="0 0 24 24" style="width:100%; height:100%; display:none;">
+        <!-- 白塗りつぶし下地 -->
+        <path d="M2,8 h20 v12 h-20 z" fill="#e0f8d0" />
+        <!-- 太い主線と輪郭 -->
+        <path d="
+          M3,12 v-3 h5 v-2 h4 v2 h10 v8 h-3 v3 h-3 v-3 h-8 v-2 h-2 v-3 z
+        " fill="none" stroke="#0f380f" stroke-width="1.2" />
+        <!-- 横向きパーマ頭 -->
+        <path d="M3,9 h5 v6 h-5 z" fill="#0f380f"/>
+        <!-- 顔（白）とすやすや目 -->
+        <rect x="7" y="10" width="5" height="4" fill="#e0f8d0"/>
+        <line x1="8" y1="12" x2="10" y2="12" stroke="#0f380f" stroke-width="1.2"/>
+        <!-- ひじまくら（腕） -->
+        <path d="M2,15 L6,12 L8,15" fill="none" stroke="#0f380f" stroke-width="1.5"/>
+        <!-- 曲げた足 -->
+        <path d="M18,14 L21,11 L22,15" fill="none" stroke="#0f380f" stroke-width="1.5"/>
+      </svg>
+
+      <!-- 💨 くっきりドットおなら -->
+      <svg id="fart-cloud" class="fart-cloud" viewBox="0 0 16 16">
+        <path d="M3,8 Q1,4 6,3 Q10,1 13,5 Q16,9 11,12 Q7,15 3,8 Z" fill="#e0f8d0" stroke="#0f380f" stroke-width="1.5"/>
+        <circle cx="4" cy="11" r="1.5" fill="#0f380f"/>
+      </svg>
     </div>
 
     <!-- メッセージ -->
@@ -296,10 +254,22 @@
   ];
 
   const idleStates = [
-    { pos: "pos-tv", pose: "pose-stand", text: "テレビのワイドショーに夢中", state: "テレビ鑑賞" },
-    { pos: "pos-chabudai-left", pose: "pose-lay", text: "ちゃぶ台の横でゴロゴロ寝転がっている", state: "ゴロゴロ居眠り" },
-    { pos: "pos-center", pose: "pose-stand", text: "畳の上でぼーっとしている", state: "休憩中" }
+    { pos: "pos-tv", pose: "stand", text: "テレビのワイドショーに夢中", state: "テレビ鑑賞" },
+    { pos: "pos-chabudai-left", pose: "lay", text: "ちゃぶ台の横でゴロゴロ寝転がっている", state: "ゴロゴロ居眠り" },
+    { pos: "pos-center", pose: "stand", text: "畳の上でぼーっとしている", state: "休憩中" }
   ];
+
+  function setPose(poseType) {
+    const standSvg = document.getElementById("okan-stand");
+    const laySvg = document.getElementById("okan-lay");
+    if(poseType === "stand") {
+      standSvg.style.display = "block";
+      laySvg.style.display = "none";
+    } else {
+      standSvg.style.display = "none";
+      laySvg.style.display = "block";
+    }
+  }
 
   function updateDisplay() {
     let hearts = "";
@@ -314,7 +284,8 @@
     if (isBusy) return;
     const action = idleStates[Math.floor(Math.random() * idleStates.length)];
     const container = document.getElementById("okan-container");
-    container.className = `okan-pixel ${action.pos} ${action.pose}`;
+    container.className = `okan-container ${action.pos}`;
+    setPose(action.pose);
     document.getElementById("dialogue").innerText = action.text;
     document.getElementById("state-val").innerText = action.state;
   }, 4000);
@@ -324,18 +295,19 @@
     if (Math.random() < 0.4) {
       isBusy = true;
       const container = document.getElementById("okan-container");
-      const fart = document.getElementById("fart-pixel");
+      const fart = document.getElementById("fart-cloud");
 
-      container.className = "okan-pixel pos-chabudai-left pose-lay";
+      container.className = "okan-container pos-chabudai-left";
+      setPose("lay");
 
       setTimeout(() => {
-        fart.className = "fart-pixel fart-active";
+        fart.className = "fart-cloud fart-active";
         document.getElementById("dialogue").innerText = "……ス〜……プッ💨 あらやだ！";
         document.getElementById("state-val").innerText = "放屁(ごろ寝中)";
       }, 300);
 
       setTimeout(() => {
-        fart.className = "fart-pixel";
+        fart.className = "fart-cloud";
         isBusy = false;
       }, 3200);
       return true;
@@ -347,7 +319,8 @@
     mood = Math.min(100, mood + 15); weight += 0.3;
     isBusy = true;
     const container = document.getElementById("okan-container");
-    container.className = "okan-pixel pos-chabudai-right pose-stand";
+    container.className = "okan-container pos-chabudai-right";
+    setPose("stand");
     document.getElementById("dialogue").innerText = "やだ～、呑んじゃおうかしら♪";
     document.getElementById("state-val").innerText = "晩酌中";
     updateDisplay();
@@ -358,7 +331,8 @@
     mood = Math.min(100, mood + 10); weight += 0.5;
     isBusy = true;
     const container = document.getElementById("okan-container");
-    container.className = "okan-pixel pos-chabudai-left pose-lay";
+    container.className = "okan-container pos-chabudai-left";
+    setPose("lay");
     document.getElementById("dialogue").innerText = "寝っ転がって食べるおせんべいが最高";
     document.getElementById("state-val").innerText = "寝ながら間食";
     updateDisplay();
@@ -369,12 +343,13 @@
     mood = Math.max(0, mood - 10); weight = Math.max(40, weight - 0.4);
     isBusy = true;
     const container = document.getElementById("okan-container");
-    container.className = "okan-pixel anim-cleaning";
+    container.className = "okan-container anim-cleaning";
+    setPose("stand");
     document.getElementById("dialogue").innerText = "はいはい、掃除すればいいんでしょ！";
     document.getElementById("state-val").innerText = "部屋を掃除中";
     updateDisplay();
     setTimeout(() => {
-      container.className = "okan-pixel pos-center pose-stand";
+      container.className = "okan-container pos-center";
       isBusy = false;
     }, 4000);
   }
