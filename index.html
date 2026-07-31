@@ -5,10 +5,17 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="オカン育成">
+<meta name="apple-mobile-web-app-title" content="オカンといっしょ">
 
-<title>オカン育成</title>
+<title>オカンといっしょ</title>
 <style>
+  /* 共通設定 */
+  :root {
+    --bg-color: #9bbc0f; /* 液晶の背景（緑） */
+    --pixel-color: #0f380f; /* ドットの色（黒） */
+    --p-size: 2px; /* 1ピクセルの大きさ（カクカク感を出す） */
+  }
+
   body {
     background-color: #111;
     color: #fff;
@@ -24,7 +31,7 @@
 
   /* たまごっち本体風フレーム */
   .game-container {
-    background-color: #e0829d;
+    background-color: #bbb; /* モノクロボディ */
     border: 5px solid #222;
     width: 88vw;
     max-width: 330px;
@@ -34,11 +41,11 @@
     box-shadow: 0 8px 0 #000, inset 0 4px 0 rgba(255,255,255,0.4);
   }
 
-  /* 液晶画面（ゲームボーイ/たまごっち風モノクログリーン） */
+  /* 液晶画面（完全モノクロ2色） */
   .screen {
-    background-color: #9bbc0f;
-    color: #0f380f;
-    border: 4px solid #0f380f;
+    background-color: var(--bg-color);
+    color: var(--pixel-color);
+    border: 4px solid var(--pixel-color);
     height: 220px;
     margin-bottom: 12px;
     border-radius: 10px;
@@ -51,94 +58,131 @@
   .room-bg {
     position: absolute;
     top: 0; left: 0; right: 0; bottom: 35px;
-    border-bottom: 3px double #0f380f;
+    border-bottom: var(--p-size) solid var(--pixel-color); /* ドット線 */
   }
 
+  /* 家具（これも文字からピクセル風に変更） */
   .furniture {
     position: absolute;
-    font-size: 24px;
-    line-height: 1;
+    color: var(--pixel-color);
+    font-size: 20px;
+    font-weight: bold;
   }
-  .tv-set { top: 15px; left: 15px; text-align: center; }
-  .tv-screen { font-size: 28px; }
-  .kotatsu { bottom: 10px; right: 15px; font-size: 32px; }
-  .window { top: 10px; right: 15px; font-size: 20px; opacity: 0.8; }
-  .clock { top: 10px; left: 50%; transform: translateX(-50%); font-size: 16px; }
+  .tv-set { top: 10px; left: 10px; }
+  .kotatsu { bottom: 8px; right: 10px; font-size: 24px;}
 
   /* -------------------------------------
-     二頭身オカンのパーツ組み上げ
+     CSSだけで描く「全身ドット絵オカン」
   ------------------------------------- */
-  .okan-container {
+  .okan-pixel {
     position: absolute;
-    transition: all 0.8s ease-in-out;
+    width: calc(var(--p-size) * 12); /* 12ドット幅 */
+    height: calc(var(--p-size) * 16); /* 16ドット高 */
+    transition: all 0.2s steps(4); /* なめらか移動を禁止（カクカク移動） */
     z-index: 10;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
   }
 
-  /* 二頭身の頭 */
-  .okan-head {
-    font-size: 26px;
-    line-height: 1;
-  }
-  /* 二頭身の体（エプロン・服） */
-  .okan-body {
-    font-size: 18px;
-    line-height: 0.8;
-    margin-top: -4px;
-  }
-
-  /* 位置パターン */
-  .pos-tv { top: 60px; left: 35px; }
-  .pos-kotatsu { top: 90px; right: 55px; }
-  .pos-center { top: 75px; left: 40%; }
-
-  /* --- ポーズ1：立ち姿（通常） --- */
-  .pose-stand {
-    flex-direction: column;
-    transform: rotate(0deg);
-  }
-
-  /* --- ポーズ2：寝っ転がり姿（横になる） --- */
-  .pose-lay {
-    flex-direction: row-reverse !important; /* 横向き */
-    transform: rotate(90deg) translateY(-10px);
-  }
-
-  /* おならエフェクト（ぷぅ💨） */
-  .fart-cloud {
+  /* ドットを描画する共通の影 */
+  .okan-pixel::after {
+    content: '';
     position: absolute;
-    font-size: 20px;
-    opacity: 0;
-    transition: all 0.3s ease;
+    width: var(--p-size);
+    height: var(--p-size);
+    background: transparent;
+    /* box-shadowでオカンのドットを打つ (12x16マス) */
   }
+
+  /* --- 立ちポーズのドットデータ --- */
+  .pose-stand::after {
+    box-shadow: 
+      /* パーマ頭 */
+      calc(var(--p-size)*4) calc(var(--p-size)*0) var(--pixel-color), calc(var(--p-size)*5) calc(var(--p-size)*0) var(--pixel-color), calc(var(--p-size)*6) calc(var(--p-size)*0) var(--pixel-color), calc(var(--p-size)*7) calc(var(--p-size)*0) var(--pixel-color),
+      calc(var(--p-size)*3) calc(var(--p-size)*1) var(--pixel-color), calc(var(--p-size)*8) calc(var(--p-size)*1) var(--pixel-color),
+      calc(var(--p-size)*2) calc(var(--p-size)*2) var(--pixel-color), calc(var(--p-size)*9) calc(var(--p-size)*2) var(--pixel-color),
+      /* 顔 */
+      calc(var(--p-size)*3) calc(var(--p-size)*3) var(--pixel-color), calc(var(--p-size)*8) calc(var(--p-size)*3) var(--pixel-color),
+      calc(var(--p-size)*3) calc(var(--p-size)*5) var(--pixel-color), calc(var(--p-size)*5) calc(var(--p-size)*5) var(--pixel-color), calc(var(--p-size)*6) calc(var(--p-size)*5) var(--pixel-color), calc(var(--p-size)*8) calc(var(--p-size)*5) var(--pixel-color), /* 目 */
+      calc(var(--p-size)*2) calc(var(--p-size)*7) var(--pixel-color), calc(var(--p-size)*9) calc(var(--p-size)*7) var(--pixel-color),
+      calc(var(--p-size)*3) calc(var(--p-size)*8) var(--pixel-color), calc(var(--p-size)*4) calc(var(--p-size)*8) var(--pixel-color), calc(var(--p-size)*5) calc(var(--p-size)*8) var(--pixel-color), calc(var(--p-size)*6) calc(var(--p-size)*8) var(--pixel-color), calc(var(--p-size)*7) calc(var(--p-size)*8) var(--pixel-color), calc(var(--p-size)*8) calc(var(--p-size)*8) var(--pixel-color),
+      /* 体（エプロン） */
+      calc(var(--p-size)*4) calc(var(--p-size)*9) var(--pixel-color), calc(var(--p-size)*7) calc(var(--p-size)*9) var(--pixel-color),
+      calc(var(--p-size)*3) calc(var(--p-size)*10) var(--pixel-color), calc(var(--p-size)*8) calc(var(--p-size)*10) var(--pixel-color),
+      calc(var(--p-size)*3) calc(var(--p-size)*12) var(--pixel-color), calc(var(--p-size)*8) calc(var(--p-size)*12) var(--pixel-color),
+      calc(var(--p-size)*4) calc(var(--p-size)*13) var(--pixel-color), calc(var(--p-size)*5) calc(var(--p-size)*13) var(--pixel-color), calc(var(--p-size)*6) calc(var(--p-size)*13) var(--pixel-color), calc(var(--p-size)*7) calc(var(--p-size)*13) var(--pixel-color),
+      /* 足 */
+      calc(var(--p-size)*4) calc(var(--p-size)*14) var(--pixel-color), calc(var(--p-size)*7) calc(var(--p-size)*14) var(--pixel-color),
+      calc(var(--p-size)*3) calc(var(--p-size)*15) var(--pixel-color), calc(var(--p-size)*4) calc(var(--p-size)*15) var(--pixel-color), calc(var(--p-size)*7) calc(var(--p-size)*15) var(--pixel-color), calc(var(--p-size)*8) calc(var(--p-size)*15) var(--pixel-color)
+    ;
+  }
+
+  /* --- 寝っ転がりポーズのドットデータ --- */
+  .pose-lay::after {
+    box-shadow: 
+      /* 寝転がったパーマ頭と顔（90度回転風に再設計） */
+      calc(var(--p-size)*10) calc(var(--p-size)*4) var(--pixel-color), calc(var(--p-size)*10) calc(var(--p-size)*5) var(--pixel-color), calc(var(--p-size)*10) calc(var(--p-size)*6) var(--pixel-color), calc(var(--p-size)*10) calc(var(--p-size)*7) var(--pixel-color),
+      calc(var(--p-size)*9) calc(var(--p-size)*3) var(--pixel-color), calc(var(--p-size)*9) calc(var(--p-size)*8) var(--pixel-color),
+      calc(var(--p-size)*8) calc(var(--p-size)*2) var(--pixel-color), calc(var(--p-size)*8) calc(var(--p-size)*9) var(--pixel-color),
+      calc(var(--p-size)*6) calc(var(--p-size)*3) var(--pixel-color), calc(var(--p-size)*6) calc(var(--p-size)*8) var(--pixel-color), /* 目 */
+      /* 体（横になる） */
+      calc(var(--p-size)*5) calc(var(--p-size)*3) var(--pixel-color), calc(var(--p-size)*5) calc(var(--p-size)*9) var(--pixel-color),
+      calc(var(--p-size)*2) calc(var(--p-size)*3) var(--pixel-color), calc(var(--p-size)*2) calc(var(--p-size)*9) var(--pixel-color),
+      calc(var(--p-size)*1) calc(var(--p-size)*4) var(--pixel-color), calc(var(--p-size)*1) calc(var(--p-size)*5) var(--pixel-color), calc(var(--p-size)*1) calc(var(--p-size)*6) var(--pixel-color), calc(var(--p-size)*1) calc(var(--p-size)*7) var(--pixel-color), calc(var(--p-size)*1) calc(var(--p-size)*8) var(--pixel-color)
+    ;
+  }
+
+  /* 位置パターン (カクカク移動用に調整) */
+  .pos-tv { top: 60px; left: 35px; }
+  .pos-kotatsu { top: 100px; right: 55px; }
+  .pos-center { top: 80px; left: 45%; }
+
+  /* おならドット（💨の代わりにピクセルで） */
+  .fart-pixel {
+    position: absolute;
+    width: var(--p-size);
+    height: var(--p-size);
+    background: transparent;
+    opacity: 0;
+    transition: all 0.1s;
+    z-index: 9;
+  }
+  .pos-kotatsu .fart-pixel { /* 寝っ転がっている時のお尻の位置 */
+    top: calc(var(--p-size) * 10);
+    left: calc(var(--p-size) * -3);
+  }
+  
   .fart-active {
     opacity: 1;
-    animation: fart-bounce 0.6s infinite alternate;
+    /* おならのドット絵 */
+    box-shadow: 
+      calc(var(--p-size)*0) calc(var(--p-size)*0) var(--pixel-color),
+      calc(var(--p-size)*1) calc(var(--p-size)*-1) var(--pixel-color), calc(var(--p-size)*1) calc(var(--p-size)*1) var(--pixel-color),
+      calc(var(--p-size)*2) calc(var(--p-size)*-2) var(--pixel-color), calc(var(--p-size)*2) calc(var(--p-size)*2) var(--pixel-color),
+      calc(var(--p-size)*3) calc(var(--p-size)*0) var(--pixel-color)
+    ;
+    animation: fart-puff 0.5s steps(2) infinite; /* カクカク点滅 */
   }
-  @keyframes fart-bounce {
-    0% { transform: scale(0.8) translate(0, 0); }
-    100% { transform: scale(1.2) translate(5px, -5px); }
-  }
+  @keyframes fart-puff { 0% { opacity: 1; } 100% { opacity: 0.5; } }
 
-  /* アニメーション：掃除 */
-  @keyframes clean-walk {
-    0% { left: 20px; top: 95px; transform: scaleX(1); }
-    50% { left: 190px; top: 65px; transform: scaleX(-1); }
-    100% { left: 20px; top: 95px; transform: scaleX(1); }
+  /* ドラクエ風掃除アニメーション（2枚の絵を切り替える） */
+  @keyframes clean-dq {
+    0% { left: 20px; top: 100px; transform: scaleX(1); }
+    50% { left: 190px; top: 70px; transform: scaleX(-1); }
+    100% { left: 20px; top: 100px; transform: scaleX(1); }
   }
   .anim-cleaning {
-    animation: clean-walk 3s infinite linear !important;
+    animation: clean-dq 3s infinite steps(6) !important; /* stepsでカクカク動かす */
   }
+  /* 掃除中は点滅させる（アニメーションの代わり） */
+  .anim-cleaning::after { animation: blink 0.3s steps(2) infinite; }
+  @keyframes blink { 0% { opacity: 1; } 100% { opacity: 0.5; } }
 
-  /* ダイアログ（吹き出し） */
+  /* ダイアログ（吹き出しもピクセル風枠に） */
   .dialogue-box {
     position: absolute;
     bottom: 0; left: 0; right: 0;
     height: 35px;
-    background: #8bac0f;
-    border-top: 2px solid #0f380f;
+    background: var(--bg-color);
+    border-top: var(--p-size) solid var(--pixel-color);
     font-size: 10px;
     font-weight: bold;
     display: flex;
@@ -185,21 +229,18 @@
 
 <div class="game-container" id="game" style="display:none;">
   <div class="screen">
-    <!-- 背景とお部屋の家具 -->
+    <!-- 背景とお部屋（文字を廃止） -->
     <div class="room-bg">
-      <div class="furniture clock">⏰</div>
-      <div class="furniture window">🪟</div>
+      <div class="furniture clock">[12:00]</div>
       <div class="furniture tv-set">
-        <div class="tv-screen" id="tv-icon">📺</div>
+        <div class="tv-screen" id="tv-icon">[TV]</div>
       </div>
-      <div class="furniture kotatsu">🪑</div>
+      <div class="furniture kotatsu">[___]</div> <!-- コタツをドット線っぽく -->
     </div>
 
-    <!-- 二頭身ドット風オカン -->
-    <div id="okan-container" class="okan-container pos-tv pose-stand">
-      <div id="okan-head" class="okan-head">👵</div>
-      <div id="okan-body" class="okan-body">🎽</div>
-      <div id="fart-cloud" class="fart-cloud">💨</div>
+    <!-- CSS全身ドット絵オカン -->
+    <div id="okan-container" class="okan-pixel pos-tv pose-stand">
+      <div id="fart-pixel" class="fart-pixel"></div>
     </div>
 
     <!-- 画面下のメッセージ -->
@@ -207,7 +248,7 @@
   </div>
 
   <div class="status">
-    <div>機嫌: <span id="mood-bar">❤️❤️🖤🖤🖤</span> (<span id="mood-val">40</span>)</div>
+    <div>機嫌: <span id="mood-bar">❤️❤️🖤🖤🖤</span></div>
     <div>体重: <span id="weight-val">55.0</span> kg</div>
     <div>行動: <span id="state-val">テレビ鑑賞</span></div>
   </div>
@@ -236,26 +277,20 @@
     "あんた、ちゃんとご飯食べてるの？",
     "今日スーパーで卵が安かったのよ～",
     "あんたの部屋、ちょっと片付けなさいよ",
-    "テレビのチャンネル、そこ変えないでよ",
-    "たまには早く寝なさいね"
+    "テレビのチャンネル、そこ変えないでよ"
   ];
 
-  // オカンの行動パターン
   const idleStates = [
-    { pos: "pos-tv", pose: "pose-stand", head: "👵", body: "🎽", tv: "📺", text: "ワイドショーを真剣に見ている", state: "テレビ鑑賞" },
-    { pos: "pos-kotatsu", pose: "pose-lay", head: "😴", body: "🎽", tv: "📺", text: "コタツの横でゴロゴロ寝転がっている", state: "ゴロゴロ居眠り" },
-    { pos: "pos-kotatsu", pose: "pose-stand", head: "🍵", body: "🎽", tv: "📺", text: "コタツでお茶をすすっている", state: "お茶タイム" },
-    { pos: "pos-center", pose: "pose-stand", head: "📱", body: "🎽", tv: "📺", text: "部屋の真ん中でスマホを眺めている", state: "スマホ操作" }
+    { pos: "pos-tv", pose: "pose-stand", text: "ワイドショーを真剣に見ている", state: "テレビ鑑賞" },
+    { pos: "pos-kotatsu", pose: "pose-lay", text: "コタツの横でゴロゴロ寝転がっている", state: "ゴロゴロ居眠り" },
+    { pos: "pos-center", pose: "pose-stand", text: "部屋の真ん中でぼーっとしている", state: "立ち話" }
   ];
 
   function updateDisplay() {
     let hearts = "";
     let filled = Math.min(5, Math.floor(mood / 20));
-    for(let i=0; i<5; i++) {
-      hearts += i < filled ? "❤️" : "🖤";
-    }
+    for(let i=0; i<5; i++) { hearts += i < filled ? "❤️" : "🖤"; }
     document.getElementById("mood-bar").innerText = hearts;
-    document.getElementById("mood-val").innerText = mood;
     document.getElementById("weight-val").innerText = weight.toFixed(1);
   }
 
@@ -263,39 +298,30 @@
   setInterval(() => {
     if (isBusy) return;
     const action = idleStates[Math.floor(Math.random() * idleStates.length)];
-    
     const container = document.getElementById("okan-container");
-    container.className = `okan-container ${action.pos} ${action.pose}`;
-    
-    document.getElementById("okan-head").innerText = action.head;
-    document.getElementById("okan-body").innerText = action.body;
-    document.getElementById("tv-icon").innerText = action.tv;
+    container.className = `okan-pixel ${action.pos} ${action.pose}`;
     document.getElementById("dialogue").innerText = action.text;
     document.getElementById("state-val").innerText = action.state;
   }, 4000);
 
-  // ⭐ 寝っ転がっておならする演出 ⭐
+  // ⭐ 寝っ転がってモノクロおなら ⭐
   function checkFart() {
     if (Math.random() < 0.3) {
       isBusy = true;
       const container = document.getElementById("okan-container");
-      const fart = document.getElementById("fart-cloud");
+      const fart = document.getElementById("fart-pixel");
 
       // コタツ横に寝っ転がらせる
-      container.className = "okan-container pos-kotatsu pose-lay";
-      document.getElementById("okan-head").innerText = "😳";
-      document.getElementById("okan-body").innerText = "🎽";
+      container.className = "okan-pixel pos-kotatsu pose-lay";
 
-      // 0.3秒後にお尻からプゥ💨と出す
       setTimeout(() => {
-        fart.className = "fart-cloud fart-active";
-        document.getElementById("dialogue").innerText = "（寝っ転がりながら）……プゥッ！あらやだ！";
+        fart.className = "fart-pixel fart-active"; // モノクロおなら描画
+        document.getElementById("dialogue").innerText = "……プゥッ！あらやだ！";
         document.getElementById("state-val").innerText = "放屁(寝ながら)";
       }, 300);
 
       setTimeout(() => {
-        fart.className = "fart-cloud";
-        document.getElementById("okan-head").innerText = "👵";
+        fart.className = "fart-pixel";
         isBusy = false;
       }, 3000);
       return true;
@@ -304,56 +330,37 @@
   }
 
   function giveSake() {
-    mood = Math.min(100, mood + 15);
-    weight += 0.3;
+    mood = Math.min(100, mood + 15); weight += 0.3;
     isBusy = true;
-    
     const container = document.getElementById("okan-container");
-    container.className = "okan-container pos-kotatsu pose-stand";
-    document.getElementById("okan-head").innerText = "🍶";
-    document.getElementById("okan-body").innerText = "🎽";
-    
+    container.className = "okan-pixel pos-kotatsu pose-stand";
     document.getElementById("dialogue").innerText = "やだ～、呑んじゃおうかしら♪";
     document.getElementById("state-val").innerText = "晩酌中";
-    
     updateDisplay();
     setTimeout(() => { isBusy = false; }, 3000);
   }
 
   function giveSnack() {
-    mood = Math.min(100, mood + 10);
-    weight += 0.5;
+    mood = Math.min(100, mood + 10); weight += 0.5;
     isBusy = true;
-
     const container = document.getElementById("okan-container");
-    container.className = "okan-container pos-kotatsu pose-lay";
-    document.getElementById("okan-head").innerText = "🍘";
-    document.getElementById("okan-body").innerText = "🎽";
-
-    document.getElementById("dialogue").innerText = "寝っ転がって食べるおせんべいが最高なのよ";
+    container.className = "okan-pixel pos-kotatsu pose-lay";
+    document.getElementById("dialogue").innerText = "寝っ転がって食べるおせんべいが最高";
     document.getElementById("state-val").innerText = "寝ながら間食";
-
     updateDisplay();
     setTimeout(() => { isBusy = false; }, 3000);
   }
 
   function doExercise() {
-    mood = Math.max(0, mood - 10);
-    weight = Math.max(40, weight - 0.4);
+    mood = Math.max(0, mood - 10); weight = Math.max(40, weight - 0.4);
     isBusy = true;
-
     const container = document.getElementById("okan-container");
-    container.className = "okan-container anim-cleaning";
-    document.getElementById("okan-head").innerText = "🧹";
-    document.getElementById("okan-body").innerText = "🎽";
-
-    document.getElementById("dialogue").innerText = "え～、今ドラマいいところなのにぃ…";
+    container.className = "okan-pixel anim-cleaning";
+    document.getElementById("dialogue").innerText = "え～、掃除ぃ？…";
     document.getElementById("state-val").innerText = "部屋を掃除中";
-
     updateDisplay();
     setTimeout(() => {
-      container.className = "okan-container pos-center pose-stand";
-      document.getElementById("okan-head").innerText = "👵";
+      container.className = "okan-pixel pos-center pose-stand";
       isBusy = false;
     }, 4000);
   }
