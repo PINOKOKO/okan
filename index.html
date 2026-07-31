@@ -3,394 +3,228 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="オカン育成">
-
-<title>オカン育成</title>
+<title>オカン育成ゲーム</title>
 <style>
-  body {
-    background-color: #1a1a1a;
-    color: #fff;
-    font-family: 'Courier New', Courier, monospace;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
-    user-select: none;
-    -webkit-user-select: none;
-  }
+    body {
+        background-color: #f0f0f0;
+        font-family: 'Helvetica Neue', Arial, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+    }
 
-  /* 本体フレーム */
-  .game-container {
-    background-color: #e2e0d8;
-    border: 4px solid #333;
-    width: 88vw;
-    max-width: 340px;
-    padding: 20px;
-    text-align: center;
-    border-radius: 42px;
-    box-shadow: 0 9px 0 #000, inset 0 4px 0 rgba(255,255,255,0.6);
-    position: relative;
-  }
+    /* ゲーム画面全体の外枠 */
+    .game-screen {
+        background-color: #dcdcdc; /* ベゼルの色 */
+        width: 360px;
+        height: 640px;
+        border-radius: 40px;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        position: relative;
+        overflow: hidden;
+        border: 4px solid #b0b0b0;
+    }
 
-  /* 液晶画面枠 */
-  .screen {
-    background-color: #bce0a8;
-    border: 4px solid #2d481e;
-    height: 230px;
-    margin-bottom: 12px;
-    border-radius: 10px;
-    position: relative;
-    overflow: hidden;
-    box-shadow: inset 3px 3px 8px rgba(0,0,0,0.3);
-  }
+    /* 液晶画面部分 */
+    .lcd-display {
+        background-color: #a3c98f; /* 液晶の背景色 */
+        width: 320px;
+        height: 440px;
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        border-radius: 20px;
+        border: 4px solid #556b2f; /* 液晶の内枠 */
+        box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+        overflow: hidden;
+    }
 
-  /* 居間の静止画背景 */
-  .room-svg {
-    position: absolute;
-    top: 0; left: 0; width: 100%; height: 195px;
-    opacity: 0.85;
-  }
+    /* 背景のアート（SVGで描画） */
+    .background-art {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 1;
+    }
 
-  /* --- キャラ配置エリア --- */
-  .okan-container {
-    position: absolute;
-    width: 80px;
-    height: 80px;
-    transition: all 0.2s steps(4);
-    z-index: 10;
-  }
+    /* オカンのドット絵キャラクター（修正版） */
+    .okan-char {
+        position: absolute;
+        bottom: 120px; /* 床の位置に合わせる */
+        left: 30px;
+        width: 100px;
+        height: 60px;
+        z-index: 2;
+    }
 
-  /* 位置設定 */
-  .pos-tv { top: 50px; right: 5px; }
-  .pos-chabudai-left { top: 85px; left: 0px; }
-  .pos-chabudai-right { top: 85px; right: 5px; }
-  .pos-center { top: 60px; left: 32%; }
+    /* ごろ寝しているテキスト */
+    .action-text {
+        position: absolute;
+        bottom: 20px;
+        left: 0;
+        width: 100%;
+        text-align: center;
+        font-size: 18px;
+        font-weight: bold;
+        color: #2f4f2f;
+        z-index: 3;
+        font-family: 'Courier New', Courier, monospace;
+    }
 
-  /* おならアニメーション */
-  .fart-cloud {
-    position: absolute;
-    top: 40px; right: -12px;
-    width: 24px; height: 24px;
-    opacity: 0;
-    z-index: 15;
-  }
+    /* 下部のステータスパネル */
+    .status-panel {
+        background-color: #333;
+        width: 320px;
+        height: 140px;
+        position: absolute;
+        bottom: 20px;
+        left: 20px;
+        border-radius: 15px;
+        color: #fff;
+        padding: 15px;
+        box-sizing: border-box;
+        font-size: 16px;
+        font-family: 'Courier New', Courier, monospace;
+        z-index: 10;
+    }
 
-  .fart-active {
-    animation: fart-pop 1s steps(3) infinite;
-  }
+    .status-item {
+        margin-bottom: 8px;
+        display: flex;
+        align-items: center;
+    }
 
-  @keyframes fart-pop {
-    0% { opacity: 0; transform: scale(0.6) translate(0, 0); }
-    50% { opacity: 1; transform: scale(1.1) translate(6px, -4px); }
-    100% { opacity: 0; transform: scale(1.3) translate(12px, -8px); }
-  }
+    .heart {
+        color: #ff4500;
+        margin-left: 5px;
+    }
 
-  /* 掃除アニメーション */
-  @keyframes clean-dq {
-    0% { left: 5px; top: 85px; transform: scaleX(1); }
-    50% { left: 175px; top: 60px; transform: scaleX(-1); }
-    100% { left: 5px; top: 85px; transform: scaleX(1); }
-  }
-  .anim-cleaning {
-    animation: clean-dq 3s infinite steps(6) !important;
-  }
+    .heart-empty {
+        color: #555;
+        margin-left: 5px;
+    }
 
-  .dialogue-box {
-    position: absolute; bottom: 0; left: 0; right: 0;
-    height: 35px;
-    background: #bce0a8;
-    border-top: 3px solid #2d481e;
-    font-size: 11px; font-weight: bold;
-    color: #1a330e;
-    display: flex; align-items: center; justify-content: center;
-    padding: 0 5px;
-  }
+    /* 操作ボタン */
+    .control-buttons {
+        position: absolute;
+        bottom: -150px; /* 画面外に配置 */
+        left: 20px;
+        width: 320px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        z-index: 20;
+    }
 
-  .status {
-    margin-bottom: 12px; text-align: left; font-size: 12px;
-    background: #222; padding: 8px 12px;
-    border-radius: 8px; border: 2px solid #444;
-  }
+    .btn {
+        background-color: #fff;
+        border: 2px solid #000;
+        border-radius: 10px;
+        padding: 10px;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 0 #000;
+        transition: all 0.1s;
+    }
 
-  .controls { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .btn:active {
+        box-shadow: 0 0 0 #000;
+        transform: translateY(4px);
+    }
 
-  button {
-    background-color: #fff; color: #000; border: 3px solid #000;
-    padding: 10px 4px; font-weight: bold; cursor: pointer;
-    font-size: 11px; border-radius: 10px;
-    box-shadow: 0 3px 0 #000;
-  }
-  button:active { box-shadow: 0 0 0 #000; transform: translateY(3px); }
+    .btn-icon {
+        margin-right: 5px;
+    }
+
 </style>
 </head>
 <body>
 
-<div class="game-container" id="game" style="display:none;">
-  <div class="screen">
-    
-    <!-- 🖼️ 昭和の居間 背景 -->
-    <svg class="room-svg" viewBox="0 0 200 160" xmlns="http://www.w3.org/2000/svg">
-      <rect x="0" y="0" width="200" height="110" fill="#a3c98f"/>
-      <line x1="0" y1="30" x2="200" y2="30" stroke="#2d481e" stroke-width="1" opacity="0.3"/>
-      <line x1="0" y1="70" x2="200" y2="70" stroke="#2d481e" stroke-width="1" opacity="0.3"/>
-      
-      <circle cx="30" cy="40" r="18" fill="none" stroke="#2d481e" stroke-width="2"/>
-      <line x1="30" y1="22" x2="30" y2="58" stroke="#2d481e" stroke-width="1"/>
-      <line x1="12" y1="40" x2="48" y2="40" stroke="#2d481e" stroke-width="1"/>
+<div class="game-screen">
+    <!-- 液晶画面 -->
+    <div class="lcd-display">
+        <!-- 背景のアートワーク -->
+        <svg class="background-art" viewBox="0 0 320 440">
+            <!-- 壁の棚とアイテム -->
+            <line x1="20" y1="100" x2="300" y2="100" stroke="#556b2f" stroke-width="2"/>
+            <line x1="20" y1="180" x2="300" y2="180" stroke="#556b2f" stroke-width="2"/>
+            
+            <!-- 丸い飾り -->
+            <circle cx="70" cy="140" r="30" stroke="#556b2f" stroke-width="2" fill="none"/>
+            <line x1="70" y1="110" x2="70" y2="170" stroke="#556b2f" stroke-width="1.5"/>
+            <line x1="40" y1="140" x2="100" y2="140" stroke="#556b2f" stroke-width="1.5"/>
+            
+            <!-- 額縁（富士） -->
+            <rect x="140" y="50" width="40" height="70" stroke="#556b2f" stroke-width="2" fill="none"/>
+            <text x="148" y="90" font-family="Arial" font-size="12" fill="#556b2f">富士</text>
+            
+            <!-- テレビ -->
+            <rect x="220" y="80" width="60" height="50" rx="10" ry="10" stroke="#556b2f" stroke-width="2" fill="none"/>
+            <rect x="228" y="88" width="35" height="34" stroke="#556b2f" stroke-width="1.5" fill="none"/>
+            <circle cx="270" cy="98" r="3" fill="#556b2f"/>
+            <circle cx="270" cy="112" r="3" fill="#556b2f"/>
+            <line x1="230" y1="80" x2="225" y2="65" stroke="#556b2f" stroke-width="1.5"/>
+            <line x1="270" y1="80" x2="275" y2="65" stroke="#556b2f" stroke-width="1.5"/>
+            
+            <!-- 床のライン -->
+            <line x1="0" y1="280" x2="320" y2="280" stroke="#556b2f" stroke-width="3"/>
+            <line x1="20" y1="310" x2="300" y2="310" stroke="#556b2f" stroke-width="2" stroke-dasharray="5,5"/>
+            
+            <!-- ちゃぶ台 -->
+            <ellipse cx="160" cy="305" rx="50" ry="20" stroke="#556b2f" stroke-width="2" fill="none"/>
+            <rect x="145" y="288" width="10" height="8" stroke="#556b2f" stroke-width="1" fill="none"/>
+            <rect x="160" y="292" width="10" height="5" stroke="#556b2f" stroke-width="1" fill="none"/>
+        </svg>
 
-      <rect x="85" y="10" width="30" height="50" fill="none" stroke="#2d481e" stroke-width="1.5"/>
-      <rect x="90" y="18" width="20" height="34" fill="#2d481e" opacity="0.15"/>
-      <text x="94" y="38" font-size="8" fill="#2d481e" font-weight="bold">富士</text>
+        <!-- オカンのドット絵キャラクター（修正版） -->
+        <svg class="okan-char" viewBox="0 0 100 60">
+            <!-- 影（薄く） -->
+            <rect x="0" y="55" width="100" height="5" fill="#c0d9af"/>
+            
+            <!-- 1. 空洞部分を白で塗りつぶし -->
+            <rect x="5" y="30" width="25" height="18" fill="#FFFFFF"/>
 
-      <rect x="150" y="35" width="40" height="30" rx="3" fill="#3a5a28" stroke="#2d481e" stroke-width="2"/>
-      <rect x="154" y="39" width="24" height="22" rx="2" fill="#88af74"/>
-      <circle cx="183" cy="44" r="2" fill="#2d481e"/>
-      <circle cx="183" cy="52" r="2" fill="#2d481e"/>
-      <line x1="160" y1="35" x2="152" y2="20" stroke="#2d481e" stroke-width="1.5"/>
-      <line x1="170" y1="35" x2="178" y2="20" stroke="#2d481e" stroke-width="1.5"/>
-      <line x1="156" y1="65" x2="152" y2="72" stroke="#2d481e" stroke-width="2"/>
-      <line x1="184" y1="65" x2="188" y2="72" stroke="#2d481e" stroke-width="2"/>
+            <!-- 2. 顔と胴体の黒い輪郭を白く塗りつぶし (肌色の顔ブロック全体を白に変更) -->
+            <rect x="30" y="10" width="25" height="38" fill="#FFFFFF"/>
+            
+            <!-- 3. 茶色の髪のブロック (そのまま) -->
+            <rect x="10" y="10" width="20" height="20" fill="#a0522d"/>
+            
+            <!-- 4. 胴体右側の黄色と白のブロック (そのまま) -->
+            <rect x="55" y="10" width="10" height="38" fill="#FFD700"/>
+            <rect x="65" y="10" width="15" height="38" fill="#FFFFFF"/>
+            
+            <!-- 5. 肌色の手/足ブロック (そのまま) -->
+            <rect x="80" y="30" width="15" height="18" fill="#ffe4c4"/>
+        </svg>
 
-      <rect x="0" y="110" width="200" height="50" fill="#88af74"/>
-      <line x1="0" y1="110" x2="200" y2="110" stroke="#2d481e" stroke-width="2"/>
-      <line x1="0" y1="135" x2="200" y2="135" stroke="#2d481e" stroke-width="3" stroke-dasharray="8,4"/>
-      <line x1="100" y1="110" x2="100" y2="135" stroke="#2d481e" stroke-width="1.5"/>
-
-      <ellipse cx="100" cy="125" rx="40" ry="12" fill="#bce0a8" stroke="#2d481e" stroke-width="2"/>
-      <line x1="70" y1="133" x2="68" y2="142" stroke="#2d481e" stroke-width="2"/>
-      <line x1="130" y1="133" x2="132" y2="142" stroke="#2d481e" stroke-width="2"/>
-      <rect x="92" y="115" width="8" height="6" rx="1" fill="#2d481e"/>
-      <path d="M 100 118 Q 104 117 103 121" fill="none" stroke="#2d481e" stroke-width="1"/>
-      <rect x="106" y="117" width="4" height="4" fill="#2d481e"/>
-    </svg>
-
-    <!-- 👾 耳横に手を添えて寝転がるドットオカン（空洞完全排除） -->
-    <div id="okan-container" class="okan-container pos-tv">
-      
-      <!-- 1. 立ち姿オカン (ふわふわ茶髪パーマ) -->
-      <svg id="okan-stand" viewBox="0 0 32 32" style="width:100%; height:100%; shape-rendering: crispEdges;">
-        <!-- パーマ髪（茶色・モコモコ感） -->
-        <path d="M 10 3 H 22 V 4 H 24 V 6 H 25 V 10 H 24 V 12 H 8 V 10 H 7 V 6 H 8 V 4 H 10 Z" fill="#795548"/>
-        <path d="M 11 4 H 21 V 5 H 23 V 7 H 24 V 9 H 23 V 11 H 9 V 9 H 8 V 7 H 9 V 5 Z" fill="#a1887f"/>
-        
-        <!-- 顔 -->
-        <rect x="9" y="11" width="14" height="8" fill="#ffdfc4"/>
-        <!-- 目・眉・ほっぺ・口 -->
-        <rect x="11" y="13" width="3" height="1" fill="#222"/>
-        <rect x="18" y="13" width="3" height="1" fill="#222"/>
-        <rect x="10" y="15" width="2" height="1" fill="#ff8a80"/>
-        <rect x="20" y="15" width="2" height="1" fill="#ff8a80"/>
-        <rect x="14" y="17" width="4" height="1" fill="#d32f2f"/>
-
-        <!-- 服（割烹着） -->
-        <rect x="8" y="19" width="16" height="10" fill="#ffffff"/>
-        <!-- 黄色帯 -->
-        <rect x="8" y="22" width="16" height="2" fill="#fbc02d"/>
-        <!-- 足 -->
-        <rect x="10" y="29" width="3" height="3" fill="#ffdfc4"/>
-        <rect x="19" y="29" width="3" height="3" fill="#ffdfc4"/>
-
-        <!-- 輪郭線 -->
-        <path d="M 10 3 H 22 V 4 H 24 V 6 H 25 V 10 H 24 V 12 H 23 V 19 H 24 V 29 H 22 V 32 H 19 V 29 H 13 V 32 H 10 V 29 H 8 V 19 H 9 V 12 H 8 V 10 H 7 V 6 H 8 V 4 Z" 
-              fill="none" stroke="#111" stroke-width="0.8"/>
-      </svg>
-
-      <!-- 2. ごろ寝オカン (耳横手添え・完全ドット描画) -->
-      <svg id="okan-lay" viewBox="0 0 32 32" style="width:100%; height:100%; display:none; shape-rendering: crispEdges;">
-        <!-- 髪（パーマ茶髪） -->
-        <rect x="4" y="11" width="10" height="7" fill="#795548"/>
-        <rect x="5" y="12" width="8" height="5" fill="#a1887f"/>
-
-        <!-- 耳横に添えた手（肌色） -->
-        <rect x="2" y="15" width="2" height="4" fill="#ffdfc4"/>
-
-        <!-- 肘・前腕（頭の下〜左床に着く部分） -->
-        <rect x="2" y="19" width="3" height="7" fill="#ffffff"/> <!-- 袖 -->
-        <rect x="3" y="17" width="2" height="3" fill="#ffdfc4"/> <!-- 腕 -->
-
-        <!-- 顔（目・口・頬） -->
-        <rect x="6" y="16" width="8" height="7" fill="#ffdfc4"/>
-        <rect x="8" y="18" width="2" height="1" fill="#222"/> <!-- 目 -->
-        <rect x="12" y="18" width="1" height="1" fill="#222"/>
-        <rect x="6" y="20" width="1" height="1" fill="#ff8a80"/> <!-- ほっぺ -->
-        <rect x="10" y="21" width="2" height="1" fill="#d32f2f"/> <!-- 口 -->
-
-        <!-- 胴体（白割烹着） -->
-        <rect x="14" y="17" width="11" height="9" fill="#ffffff"/>
-        <!-- 帯（黄色） -->
-        <rect x="18" y="17" width="2" height="9" fill="#fbc02d"/>
-
-        <!-- 足（投げ出し素足） -->
-        <rect x="25" y="23" width="6" height="3" fill="#ffdfc4"/>
-
-        <!-- 輪郭線・パーツ境界線（黒） -->
-        <!-- 外郭 -->
-        <path d="M 4 11 H 14 V 17 H 25 V 23 H 31 V 26 H 14 V 26 H 5 V 26 H 2 V 15 H 4 V 11 Z" 
-              fill="none" stroke="#111" stroke-width="0.8"/>
-        <!-- 顔と手・髪の境界 -->
-        <line x1="4" y1="15" x2="4" y2="19" stroke="#111" stroke-width="0.8"/>
-        <line x1="6" y1="16" x2="6" y2="23" stroke="#111" stroke-width="0.8"/>
-        <!-- 首から割烹着の境界 -->
-        <line x1="14" y1="17" x2="14" y2="26" stroke="#111" stroke-width="0.8"/>
-      </svg>
-
-      <!-- 💨 ドット絵おなら雲 -->
-      <svg id="fart-cloud" class="fart-cloud" viewBox="0 0 16 16" style="shape-rendering: crispEdges;">
-        <path d="M4 6h8v1h2v2h-1v2h-2v1H5v-1H3v-2H2V7h2V6z" fill="#ffffff" stroke="#222" stroke-width="1"/>
-        <circle cx="3" cy="12" r="1" fill="#222"/>
-        <circle cx="1" cy="14" r="0.8" fill="#222"/>
-      </svg>
+        <!-- アクションテキスト -->
+        <div class="action-text">ちゃぶ台の横でゴロゴロ寝転がっている</div>
     </div>
 
-    <!-- メッセージ -->
-    <div id="dialogue" class="dialogue-box">テレビでも見ようかねぇ</div>
-  </div>
+    <!-- ステータスパネル -->
+    <div class="status-panel">
+        <div class="status-item">機嫌: <span class="heart">❤️</span><span class="heart">❤️</span><span class="heart-empty">🖤</span><span class="heart-empty">🖤</span><span class="heart-empty">🖤</span></div>
+        <div class="status-item">体重: 55.5 kg</div>
+        <div class="status-item">行動: ゴロゴロ居眠り</div>
+    </div>
 
-  <div class="status">
-    <div>機嫌: <span id="mood-bar">❤️❤️🖤🖤🖤</span></div>
-    <div>体重: <span id="weight-val">55.0</span> kg</div>
-    <div>行動: <span id="state-val">テレビ鑑賞</span></div>
-  </div>
-
-  <div class="controls">
-    <button onclick="giveSake()">🍶 お酒あげる</button>
-    <button onclick="giveSnack()">🥜 おつまみ</button>
-    <button onclick="doExercise()">🧹 部屋掃除</button>
-    <button onclick="talk()">💬 話しかける</button>
-  </div>
+    <!-- 操作ボタン -->
+    <div class="control-buttons">
+        <button class="btn"><span class="btn-icon">🍶</span>お酒あげる</button>
+        <button class="btn"><span class="btn-icon">🥜</span>おつまみ</button>
+        <button class="btn"><span class="btn-icon">🧹</span>部屋掃除</button>
+        <button class="btn"><span class="btn-icon">💬</span>話しかける</button>
+    </div>
 </div>
-
-<script>
-  const pass = prompt("合言葉を入力してね (初期値: 1234)");
-  if(pass === "1234") {
-    document.getElementById("game").style.display = "block";
-  } else {
-    alert("合言葉が違います！");
-  }
-
-  let mood = 40;
-  let weight = 55.0;
-  let isBusy = false;
-
-  const lines = [
-    "あんた、ちゃんとご飯食べてるの？",
-    "今日スーパーで卵が安かったのよ～",
-    "あんたの部屋、ちょっと片付けなさいよ",
-    "テレビのチャンネル、そこ変えないでよ"
-  ];
-
-  const idleStates = [
-    { pos: "pos-tv", pose: "stand", text: "テレビのワイドショーに夢中", state: "テレビ鑑賞" },
-    { pos: "pos-chabudai-left", pose: "lay", text: "ちゃぶ台の横でゴロゴロ寝転がっている", state: "ゴロゴロ居眠り" },
-    { pos: "pos-center", pose: "stand", text: "畳の上でぼーっとしている", state: "休憩中" }
-  ];
-
-  function setPose(poseType) {
-    const standSvg = document.getElementById("okan-stand");
-    const laySvg = document.getElementById("okan-lay");
-    if(poseType === "stand") {
-      standSvg.style.display = "block";
-      laySvg.style.display = "none";
-    } else {
-      standSvg.style.display = "none";
-      laySvg.style.display = "block";
-    }
-  }
-
-  function updateDisplay() {
-    let hearts = "";
-    let filled = Math.min(5, Math.floor(mood / 20));
-    for(let i=0; i<5; i++) { hearts += i < filled ? "❤️" : "🖤"; }
-    document.getElementById("mood-bar").innerText = hearts;
-    document.getElementById("weight-val").innerText = weight.toFixed(1);
-  }
-
-  // 自動行動
-  setInterval(() => {
-    if (isBusy) return;
-    const action = idleStates[Math.floor(Math.random() * idleStates.length)];
-    const container = document.getElementById("okan-container");
-    container.className = `okan-container ${action.pos}`;
-    setPose(action.pose);
-    document.getElementById("dialogue").innerText = action.text;
-    document.getElementById("state-val").innerText = action.state;
-  }, 4000);
-
-  // おならイベント
-  function checkFart() {
-    if (Math.random() < 0.4) {
-      isBusy = true;
-      const container = document.getElementById("okan-container");
-      const fart = document.getElementById("fart-cloud");
-
-      container.className = "okan-container pos-chabudai-left";
-      setPose("lay");
-
-      setTimeout(() => {
-        fart.className = "fart-cloud fart-active";
-        document.getElementById("dialogue").innerText = "……ス〜……プッ💨 あらやだ！";
-        document.getElementById("state-val").innerText = "放屁(ごろ寝中)";
-      }, 300);
-
-      setTimeout(() => {
-        fart.className = "fart-cloud";
-        isBusy = false;
-      }, 3200);
-      return true;
-    }
-    return false;
-  }
-
-  function giveSake() {
-    mood = Math.min(100, mood + 15); weight += 0.3;
-    isBusy = true;
-    const container = document.getElementById("okan-container");
-    container.className = "okan-container pos-chabudai-right";
-    setPose("stand");
-    document.getElementById("dialogue").innerText = "やだ～、呑んじゃおうかしら♪";
-    document.getElementById("state-val").innerText = "晩酌中";
-    updateDisplay();
-    setTimeout(() => { isBusy = false; }, 3000);
-  }
-
-  function giveSnack() {
-    mood = Math.min(100, mood + 10); weight += 0.5;
-    isBusy = true;
-    const container = document.getElementById("okan-container");
-    container.className = "okan-container pos-chabudai-left";
-    setPose("lay");
-    document.getElementById("dialogue").innerText = "寝っ転がって食べるおせんべいが最高";
-    document.getElementById("state-val").innerText = "寝ながら間食";
-    updateDisplay();
-    setTimeout(() => { isBusy = false; }, 3000);
-  }
-
-  function doExercise() {
-    mood = Math.max(0, mood - 10); weight = Math.max(40, weight - 0.4);
-    isBusy = true;
-    const container = document.getElementById("okan-container");
-    container.className = "okan-container anim-cleaning";
-    setPose("stand");
-    document.getElementById("dialogue").innerText = "はいはい、掃除すればいいんでしょ！";
-    document.getElementById("state-val").innerText = "部屋を掃除中";
-    updateDisplay();
-    setTimeout(() => {
-      container.className = "okan-container pos-center";
-      isBusy = false;
-    }, 4000);
-  }
-
-  function talk() {
-    if(!checkFart()) {
-      document.getElementById("dialogue").innerText = lines[Math.floor(Math.random() * lines.length)];
-      document.getElementById("state-val").innerText = "会話中";
-    }
-    updateDisplay();
-  }
-</script>
 
 </body>
 </html>
