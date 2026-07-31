@@ -181,11 +181,16 @@
     <!-- 👾 キャラ配置エリア -->
     <div id="okan-container" class="okan-container pos-tv">
       
-      <!-- ★立ち姿オカン (ふわふわ茶髪パーマ) のみ残す★ -->
+      <!-- ★立ち姿オカン (全体に黒のドット輪郭線を追加)★ -->
       <svg id="okan-stand" viewBox="0 0 32 32" style="width:100%; height:100%; shape-rendering: crispEdges;">
+        <!-- 全体のアウトライン（黒枠） -->
+        <path d="
+          M 10 3 H 22 V 4 H 24 V 6 H 25 V 12 H 24 V 19 H 23 V 29 H 22 V 32 H 19 V 29 H 13 V 32 H 10 V 29 H 9 V 19 H 8 V 12 H 7 V 6 H 8 V 4 H 10 Z
+        " fill="#111111"/>
+
         <!-- パーマ髪（茶色・モコモコ感） -->
-        <path d="M 10 3 H 22 V 4 H 24 V 6 H 25 V 10 H 24 V 12 H 8 V 10 H 7 V 6 H 8 V 4 H 10 Z" fill="#795548"/>
-        <path d="M 11 4 H 21 V 5 H 23 V 7 H 24 V 9 H 23 V 11 H 9 V 9 H 8 V 7 H 9 V 5 Z" fill="#a1887f"/>
+        <path d="M 10 4 H 22 V 5 H 24 V 6 H 24 V 11 H 8 V 6 H 8 V 5 H 10 Z" fill="#795548"/>
+        <path d="M 11 5 H 21 V 6 H 23 V 7 H 23 V 10 H 9 V 7 H 9 V 6 H 11 Z" fill="#a1887f"/>
         
         <!-- 顔 -->
         <rect x="9" y="11" width="14" height="8" fill="#ffdfc4"/>
@@ -197,19 +202,13 @@
         <rect x="14" y="17" width="4" height="1" fill="#d32f2f"/>
 
         <!-- 服（割烹着） -->
-        <rect x="8" y="19" width="16" height="10" fill="#ffffff"/>
+        <rect x="9" y="19" width="14" height="10" fill="#ffffff"/>
         <!-- 黄色帯 -->
-        <rect x="8" y="22" width="16" height="2" fill="#fbc02d"/>
+        <rect x="9" y="22" width="14" height="2" fill="#fbc02d"/>
         <!-- 足 -->
-        <rect x="10" y="29" width="3" height="3" fill="#ffdfc4"/>
-        <rect x="19" y="29" width="3" height="3" fill="#ffdfc4"/>
-
-        <!-- 輪郭線 -->
-        <path d="M 10 3 H 22 V 4 H 24 V 6 H 25 V 10 H 24 V 12 H 8 V 10 H 7 V 6 H 8 V 4 Z" 
-              fill="none" stroke="#111" stroke-width="0.8"/>
+        <rect x="10" y="29" width="3" height="2" fill="#ffdfc4"/>
+        <rect x="19" y="29" width="3" height="2" fill="#ffdfc4"/>
       </svg>
-
-      <!-- ★元の `#okan-lay`（ごろ寝ドット絵）は削除しました★ -->
 
       <!-- 💨 ドット絵おなら雲 -->
       <svg id="fart-cloud" class="fart-cloud" viewBox="0 0 16 16" style="shape-rendering: crispEdges;">
