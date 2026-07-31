@@ -34,27 +34,26 @@
     box-shadow: 0 8px 0 #000, inset 0 4px 0 rgba(255,255,255,0.4);
   }
 
-  /* ドット絵ドールハウス画面 */
+  /* 液晶画面（ゲームボーイ/たまごっち風モノクログリーン） */
   .screen {
-    background-color: #9bbc0f; /* 液晶カラー */
+    background-color: #9bbc0f;
     color: #0f380f;
     border: 4px solid #0f380f;
     height: 220px;
     margin-bottom: 12px;
     border-radius: 10px;
     position: relative;
-    overflow: hidden; /* 部屋からはみ出ないようにする */
+    overflow: hidden;
     box-shadow: inset 3px 3px 6px rgba(0,0,0,0.3);
   }
 
-  /* --- 部屋のレイアウト --- */
+  /* お部屋のレイアウト */
   .room-bg {
     position: absolute;
-    top: 0; left: 0; right: 0; bottom: 35px; /* 上半分が部屋空間 */
-    border-bottom: 3px double #0f380f; /* 畳/フローリングの境目 */
+    top: 0; left: 0; right: 0; bottom: 35px;
+    border-bottom: 3px double #0f380f;
   }
 
-  /* 家具の配置 (引きの構図用) */
   .furniture {
     position: absolute;
     font-size: 24px;
@@ -62,40 +61,75 @@
   }
   .tv-set { top: 15px; left: 15px; text-align: center; }
   .tv-screen { font-size: 28px; }
-  .kotatsu { bottom: 10px; right: 20px; font-size: 32px; }
+  .kotatsu { bottom: 10px; right: 15px; font-size: 32px; }
   .window { top: 10px; right: 15px; font-size: 20px; opacity: 0.8; }
   .clock { top: 10px; left: 50%; transform: translateX(-50%); font-size: 16px; }
 
-  /* オカンの位置（動的にCSSクラスで切り替え） */
-  .okan {
+  /* -------------------------------------
+     二頭身オカンのパーツ組み上げ
+  ------------------------------------- */
+  .okan-container {
     position: absolute;
-    font-size: 36px;
-    transition: all 0.8s ease-in-out; /* なめらかに移動 */
+    transition: all 0.8s ease-in-out;
     z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 
-  /* オカンの位置パターン */
-  .pos-tv { top: 60px; left: 30px; }            /* テレビ前 */
-  .pos-kotatsu { top: 95px; right: 55px; }       /* コタツ */
-  .pos-center { top: 80px; left: 45%; }          /* 部屋中央 */
+  /* 二頭身の頭 */
+  .okan-head {
+    font-size: 26px;
+    line-height: 1;
+  }
+  /* 二頭身の体（エプロン・服） */
+  .okan-body {
+    font-size: 18px;
+    line-height: 0.8;
+    margin-top: -4px;
+  }
 
-  /* アニメーション：掃除（左右にドタバタ動く） */
+  /* 位置パターン */
+  .pos-tv { top: 60px; left: 35px; }
+  .pos-kotatsu { top: 90px; right: 55px; }
+  .pos-center { top: 75px; left: 40%; }
+
+  /* --- ポーズ1：立ち姿（通常） --- */
+  .pose-stand {
+    flex-direction: column;
+    transform: rotate(0deg);
+  }
+
+  /* --- ポーズ2：寝っ転がり姿（横になる） --- */
+  .pose-lay {
+    flex-direction: row-reverse !important; /* 横向き */
+    transform: rotate(90deg) translateY(-10px);
+  }
+
+  /* おならエフェクト（ぷぅ💨） */
+  .fart-cloud {
+    position: absolute;
+    font-size: 20px;
+    opacity: 0;
+    transition: all 0.3s ease;
+  }
+  .fart-active {
+    opacity: 1;
+    animation: fart-bounce 0.6s infinite alternate;
+  }
+  @keyframes fart-bounce {
+    0% { transform: scale(0.8) translate(0, 0); }
+    100% { transform: scale(1.2) translate(5px, -5px); }
+  }
+
+  /* アニメーション：掃除 */
   @keyframes clean-walk {
-    0% { left: 20px; top: 100px; transform: scaleX(1); }
-    50% { left: 200px; top: 70px; transform: scaleX(-1); }
-    100% { left: 20px; top: 100px; transform: scaleX(1); }
+    0% { left: 20px; top: 95px; transform: scaleX(1); }
+    50% { left: 190px; top: 65px; transform: scaleX(-1); }
+    100% { left: 20px; top: 95px; transform: scaleX(1); }
   }
   .anim-cleaning {
     animation: clean-walk 3s infinite linear !important;
-  }
-
-  /* アニメーション：だらだら微振動 */
-  @keyframes chill {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-2px); }
-  }
-  .anim-chill {
-    animation: chill 1.5s infinite ease-in-out;
   }
 
   /* ダイアログ（吹き出し） */
@@ -161,8 +195,12 @@
       <div class="furniture kotatsu">🪑</div>
     </div>
 
-    <!-- 引きの構図で動くオカン -->
-    <div id="okan-sprite" class="okan pos-tv anim-chill">👵</div>
+    <!-- 二頭身ドット風オカン -->
+    <div id="okan-container" class="okan-container pos-tv pose-stand">
+      <div id="okan-head" class="okan-head">👵</div>
+      <div id="okan-body" class="okan-body">🎽</div>
+      <div id="fart-cloud" class="fart-cloud">💨</div>
+    </div>
 
     <!-- 画面下のメッセージ -->
     <div id="dialogue" class="dialogue-box">テレビでも見ようかねぇ</div>
@@ -202,12 +240,12 @@
     "たまには早く寝なさいね"
   ];
 
-  // オカンの行動パターン（位置・スプライト・テキスト）
+  // オカンの行動パターン
   const idleStates = [
-    { pos: "pos-tv", anim: "anim-chill", sprite: "👵", tv: "📺", text: "ワイドショーを真剣に見ている", state: "テレビ鑑賞" },
-    { pos: "pos-kotatsu", anim: "anim-chill", sprite: "😴", tv: "📺", text: "コタツの横で横になって寝ている", state: "居眠り" },
-    { pos: "pos-kotatsu", anim: "anim-chill", sprite: "🍵", tv: "📺", text: "コタツでお茶をすすっている", state: "お茶タイム" },
-    { pos: "pos-center", anim: "anim-chill", sprite: "📱", tv: "📺", text: "部屋の真ん中でスマホを眺めている", state: "スマホ操作" }
+    { pos: "pos-tv", pose: "pose-stand", head: "👵", body: "🎽", tv: "📺", text: "ワイドショーを真剣に見ている", state: "テレビ鑑賞" },
+    { pos: "pos-kotatsu", pose: "pose-lay", head: "😴", body: "🎽", tv: "📺", text: "コタツの横でゴロゴロ寝転がっている", state: "ゴロゴロ居眠り" },
+    { pos: "pos-kotatsu", pose: "pose-stand", head: "🍵", body: "🎽", tv: "📺", text: "コタツでお茶をすすっている", state: "お茶タイム" },
+    { pos: "pos-center", pose: "pose-stand", head: "📱", body: "🎽", tv: "📺", text: "部屋の真ん中でスマホを眺めている", state: "スマホ操作" }
   ];
 
   function updateDisplay() {
@@ -221,34 +259,45 @@
     document.getElementById("weight-val").innerText = weight.toFixed(1);
   }
 
-  // 4秒ごとに部屋の中を勝手に移動＆ダラダラ変化
+  // 4秒ごとに放置アニメーション切り替え
   setInterval(() => {
     if (isBusy) return;
     const action = idleStates[Math.floor(Math.random() * idleStates.length)];
     
-    const okan = document.getElementById("okan-sprite");
-    okan.className = `okan ${action.pos} ${action.anim}`;
-    okan.innerText = action.sprite;
+    const container = document.getElementById("okan-container");
+    container.className = `okan-container ${action.pos} ${action.pose}`;
     
+    document.getElementById("okan-head").innerText = action.head;
+    document.getElementById("okan-body").innerText = action.body;
     document.getElementById("tv-icon").innerText = action.tv;
     document.getElementById("dialogue").innerText = action.text;
     document.getElementById("state-val").innerText = action.state;
   }, 4000);
 
+  // ⭐ 寝っ転がっておならする演出 ⭐
   function checkFart() {
-    if (Math.random() < 0.25) {
+    if (Math.random() < 0.3) {
       isBusy = true;
-      const okan = document.getElementById("okan-sprite");
-      okan.className = "okan pos-center anim-chill";
-      okan.innerText = "😳";
-      
-      document.getElementById("dialogue").innerText = "プッ……！ (///) あらやだ、聞こえた？";
-      document.getElementById("state-val").innerText = "放屁";
+      const container = document.getElementById("okan-container");
+      const fart = document.getElementById("fart-cloud");
+
+      // コタツ横に寝っ転がらせる
+      container.className = "okan-container pos-kotatsu pose-lay";
+      document.getElementById("okan-head").innerText = "😳";
+      document.getElementById("okan-body").innerText = "🎽";
+
+      // 0.3秒後にお尻からプゥ💨と出す
+      setTimeout(() => {
+        fart.className = "fart-cloud fart-active";
+        document.getElementById("dialogue").innerText = "（寝っ転がりながら）……プゥッ！あらやだ！";
+        document.getElementById("state-val").innerText = "放屁(寝ながら)";
+      }, 300);
 
       setTimeout(() => {
-        okan.innerText = "👵";
+        fart.className = "fart-cloud";
+        document.getElementById("okan-head").innerText = "👵";
         isBusy = false;
-      }, 2500);
+      }, 3000);
       return true;
     }
     return false;
@@ -259,9 +308,10 @@
     weight += 0.3;
     isBusy = true;
     
-    const okan = document.getElementById("okan-sprite");
-    okan.className = "okan pos-kotatsu anim-chill";
-    okan.innerText = "🍶";
+    const container = document.getElementById("okan-container");
+    container.className = "okan-container pos-kotatsu pose-stand";
+    document.getElementById("okan-head").innerText = "🍶";
+    document.getElementById("okan-body").innerText = "🎽";
     
     document.getElementById("dialogue").innerText = "やだ～、呑んじゃおうかしら♪";
     document.getElementById("state-val").innerText = "晩酌中";
@@ -275,12 +325,13 @@
     weight += 0.5;
     isBusy = true;
 
-    const okan = document.getElementById("okan-sprite");
-    okan.className = "okan pos-kotatsu anim-chill";
-    okan.innerText = "🍘";
+    const container = document.getElementById("okan-container");
+    container.className = "okan-container pos-kotatsu pose-lay";
+    document.getElementById("okan-head").innerText = "🍘";
+    document.getElementById("okan-body").innerText = "🎽";
 
-    document.getElementById("dialogue").innerText = "このしょっぱいのが美味しいのよ";
-    document.getElementById("state-val").innerText = "間食中";
+    document.getElementById("dialogue").innerText = "寝っ転がって食べるおせんべいが最高なのよ";
+    document.getElementById("state-val").innerText = "寝ながら間食";
 
     updateDisplay();
     setTimeout(() => { isBusy = false; }, 3000);
@@ -291,18 +342,18 @@
     weight = Math.max(40, weight - 0.4);
     isBusy = true;
 
-    const okan = document.getElementById("okan-sprite");
-    // 掃除中アニメーションを適用して部屋中を動かす
-    okan.className = "okan anim-cleaning";
-    okan.innerText = "🧹";
+    const container = document.getElementById("okan-container");
+    container.className = "okan-container anim-cleaning";
+    document.getElementById("okan-head").innerText = "🧹";
+    document.getElementById("okan-body").innerText = "🎽";
 
     document.getElementById("dialogue").innerText = "え～、今ドラマいいところなのにぃ…";
     document.getElementById("state-val").innerText = "部屋を掃除中";
 
     updateDisplay();
     setTimeout(() => {
-      okan.className = "okan pos-center anim-chill";
-      okan.innerText = "👵";
+      container.className = "okan-container pos-center pose-stand";
+      document.getElementById("okan-head").innerText = "👵";
       isBusy = false;
     }, 4000);
   }
