@@ -2,7 +2,6 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<!-- スマホ用設定：拡大防止＆アプリ化 -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -19,74 +18,114 @@
     align-items: center;
     height: 100vh;
     margin: 0;
-    user-select: none; /* スマホで文字が選択されないようにする */
+    user-select: none;
     -webkit-user-select: none;
   }
   .game-container {
-    background-color: #333;
-    border: 4px solid #fff;
+    background-color: #d8a0b0; /* たまごっち風のピンク系ボディ */
+    border: 6px solid #444;
     width: 85vw;
     max-width: 320px;
     padding: 20px;
     text-align: center;
-    border-radius: 12px;
-    box-shadow: 0 0 20px rgba(0,0,0,0.5);
+    border-radius: 40px; /* 卵型の丸み */
+    box-shadow: 0 8px 0 #222, inset 0 4px 0 rgba(255,255,255,0.4);
   }
   .screen {
-    background-color: #9bbc0f; /* レトロゲームボーイ風 */
+    background-color: #9bbc0f; /* ゲームボーイ/たまごっち液晶色 */
     color: #0f380f;
     border: 4px solid #0f380f;
-    height: 180px;
+    height: 200px;
     margin-bottom: 15px;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
-    border-radius: 6px;
+    border-radius: 12px;
+    padding: 10px;
+    box-sizing: border-box;
+    position: relative;
+    box-shadow: inset 2px 2px 5px rgba(0,0,0,0.2);
   }
+
+  /* お部屋のレイアウト */
+  .room {
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-end;
+    width: 100%;
+    height: 100px;
+    border-bottom: 2px dashed #0f380f; /* 畳/フローリングの床線 */
+  }
+
+  .tv {
+    font-size: 35px;
+  }
+
+  .okan-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
   .okan {
-    font-size: 55px;
-    margin-bottom: 5px;
+    font-size: 50px;
     transition: transform 0.3s;
+    animation: sway 2s infinite ease-in-out; /* ゆらゆら動く */
   }
+
+  /* ダラダラ揺れるアニメーション */
+  @keyframes sway {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-3px) rotate(2deg); }
+  }
+
   .dialogue {
-    font-size: 12px;
+    font-size: 11px;
+    font-weight: bold;
     background: #8bac0f;
-    padding: 6px 8px;
+    padding: 4px 6px;
     border: 2px solid #0f380f;
-    min-height: 28px;
-    width: 80%;
+    min-height: 26px;
+    width: 90%;
     border-radius: 4px;
     display: flex;
     align-items: center;
     justify-content: center;
+    margin-top: 5px;
   }
+
   .status {
     margin-bottom: 15px;
     text-align: left;
-    font-size: 14px;
-    background: #444;
+    font-size: 13px;
+    background: #222;
     padding: 10px;
-    border-radius: 6px;
+    border-radius: 8px;
+    border: 2px solid #555;
   }
+
   .controls {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 10px;
   }
+
   button {
     background-color: #fff;
     color: #000;
-    border: 2px solid #000;
-    padding: 12px 5px;
+    border: 3px solid #000;
+    padding: 10px 5px;
     font-weight: bold;
     cursor: pointer;
-    font-size: 13px;
-    border-radius: 6px;
+    font-size: 12px;
+    border-radius: 12px;
+    box-shadow: 0 4px 0 #000;
   }
+
   button:active {
-    background-color: #aaa;
-    transform: scale(0.95);
+    box-shadow: 0 0 0 #000;
+    transform: translateY(4px);
   }
 </style>
 </head>
@@ -94,25 +133,34 @@
 
 <div class="game-container" id="game" style="display:none;">
   <div class="screen">
-    <div id="okan-sprite" class="okan">👵</div>
+    <!-- お部屋の中身 -->
+    <div class="room">
+      <div class="tv" id="tv-icon">📺</div>
+      <div class="okan-container">
+        <div id="okan-sprite" class="okan">👵</div>
+      </div>
+      <div style="font-size:25px;">🍊</div> <!-- 部屋のこたつ/みかん感 -->
+    </div>
+
+    <!-- 台詞吹き出し -->
     <div id="dialogue" class="dialogue">テレビでも見ようかねぇ</div>
   </div>
 
   <div class="status">
     <div>機嫌: <span id="mood-bar">❤️❤️🖤🖤🖤</span> (<span id="mood-val">40</span>)</div>
     <div>体重: <span id="weight-val">55.0</span> kg</div>
+    <div>状態: <span id="state-val">ダラダラ中</span></div>
   </div>
 
   <div class="controls">
-    <button onclick="giveSake()">🍶 お酒をあげる</button>
+    <button onclick="giveSake()">🍶 お酒あげる</button>
     <button onclick="giveSnack()">🥜 おつまみ</button>
-    <button onclick="doExercise()">🏃‍♀️ 運動させる</button>
+    <button onclick="doExercise()">🏃‍♀️ 掃除させる</button>
     <button onclick="talk()">💬 話しかける</button>
   </div>
 </div>
 
 <script>
-  // パスワード保護（いらない場合はこの判定を消してもOKです）
   const pass = prompt("合言葉を入力してね (初期値: 1234)");
   if(pass === "1234") {
     document.getElementById("game").style.display = "block";
@@ -122,13 +170,23 @@
 
   let mood = 40;
   let weight = 55.0;
+  let isBusy = false;
 
   const lines = [
     "あんた、ちゃんとご飯食べてるの？",
-    "今日スーパーで卵が安かったのよ〜",
+    "今日スーパーで卵が安かったのよ～",
     "あんたの部屋、ちょっと片付けなさいよ",
     "テレビのチャンネル、そこ変えないでよ",
-    "たまには早く寝なさいね"
+    "たまには早く寝なさいね",
+    "あ～、腰が重たいわぁ"
+  ];
+
+  // 放置していると勝手に変わるダラダラ行動
+  const idleStates = [
+    { sprite: "👵", tv: "📺", text: "テレビのワイドショーに夢中…", state: "テレビ鑑賞" },
+    { sprite: "😴", tv: "📺", text: "（うとうと…）テレビつけたまま寝てる", state: "居眠り" },
+    { sprite: "🍵", tv: "📺", text: "お茶をすすって一息ついている", state: "お茶タイム" },
+    { sprite: "📱", tv: "📺", text: "スマホでLINEの絵文字を探している", state: "スマホ操作" }
   ];
 
   function updateDisplay() {
@@ -152,15 +210,26 @@
     }
   }
 
+  // 3秒ごとにお部屋のオカンの様子が勝手に変わる（たまごっち感）
+  setInterval(() => {
+    if (isBusy) return; // おなら中やアクション中は勝手に変えない
+    const randomIdle = idleStates[Math.floor(Math.random() * idleStates.length)];
+    document.getElementById("okan-sprite").innerText = randomIdle.sprite;
+    document.getElementById("tv-icon").innerText = randomIdle.tv;
+    document.getElementById("dialogue").innerText = randomIdle.text;
+    document.getElementById("state-val").innerText = randomIdle.state;
+  }, 4000);
+
   function checkFart() {
-    if (Math.random() < 0.2) {
+    if (Math.random() < 0.25) {
+      isBusy = true;
+      document.getElementById("dialogue").innerText = "プッ……！ (///) あらやだ、聞こえた？";
+      document.getElementById("okan-sprite").innerText = "😳";
+      document.getElementById("state-val").innerText = "放屁";
       setTimeout(() => {
-        document.getElementById("dialogue").innerText = "プッ……！ (///) あらやだ、聞こえた？";
-        document.getElementById("okan-sprite").innerText = "😳";
-        setTimeout(() => {
-          document.getElementById("okan-sprite").innerText = "👵";
-        }, 2000);
-      }, 300);
+        document.getElementById("okan-sprite").innerText = "👵";
+        isBusy = false;
+      }, 2500);
       return true;
     }
     return false;
@@ -169,23 +238,27 @@
   function giveSake() {
     mood = Math.min(100, mood + 15);
     weight += 0.3;
-    document.getElementById("dialogue").innerText = "やだ〜、呑んじゃおうかしら♪";
+    document.getElementById("dialogue").innerText = "やだ～、呑んじゃおうかしら♪";
+    document.getElementById("okan-sprite").innerText = "🍶";
+    document.getElementById("state-val").innerText = "晩酌中";
     if(!checkFart()) updateDisplay();
-    else updateDisplay();
   }
 
   function giveSnack() {
     mood = Math.min(100, mood + 10);
     weight += 0.5;
     document.getElementById("dialogue").innerText = "このしょっぱいのが美味しいのよ";
+    document.getElementById("okan-sprite").innerText = "🍘";
+    document.getElementById("state-val").innerText = "間食中";
     if(!checkFart()) updateDisplay();
-    else updateDisplay();
   }
 
   function doExercise() {
     mood = Math.max(0, mood - 10);
     weight = Math.max(40, weight - 0.4);
-    document.getElementById("dialogue").innerText = "え〜、今テレビいいところなのにぃ…";
+    document.getElementById("dialogue").innerText = "え～、今ドラマいいところなのにぃ…";
+    document.getElementById("okan-sprite").innerText = "🧹";
+    document.getElementById("state-val").innerText = "渋々掃除";
     updateDisplay();
   }
 
@@ -193,6 +266,7 @@
     if(!checkFart()) {
       const randomLine = lines[Math.floor(Math.random() * lines.length)];
       document.getElementById("dialogue").innerText = randomLine;
+      document.getElementById("state-val").innerText = "会話中";
     }
     updateDisplay();
   }
