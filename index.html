@@ -9,15 +9,6 @@
 
 <title>オカン育成</title>
 <style>
-  :root {
-    --bg-color: #bce0a8; /* レトロ液晶背景 */
-    --pixel-color: #1a1a1a; /* ドット黒 */
-    --hair-color: #795548; /* 茶髪 */
-    --skin-color: #ffdfc4; /* 肌 */
-    --obi-color: #fbc02d; /* 帯 */
-    --p-size: 2px; /* 1ピクセルの大きさ */
-  }
-
   body {
     background-color: #1a1a1a;
     color: #fff;
@@ -37,24 +28,23 @@
     border: 4px solid #333;
     width: 88vw;
     max-width: 340px;
-    padding: 18px;
+    padding: 20px;
     text-align: center;
-    border-radius: 40px;
-    box-shadow: 0 8px 0 #000, inset 0 4px 0 rgba(255,255,255,0.5);
+    border-radius: 42px;
+    box-shadow: 0 9px 0 #000, inset 0 4px 0 rgba(255,255,255,0.6);
     position: relative;
   }
 
   /* 液晶画面枠 */
   .screen {
-    background-color: var(--bg-color);
-    color: var(--pixel-color);
-    border: 3px solid #2d481e;
-    height: 225px;
+    background-color: #bce0a8;
+    border: 4px solid #2d481e;
+    height: 230px;
     margin-bottom: 12px;
-    border-radius: 8px;
+    border-radius: 10px;
     position: relative;
     overflow: hidden;
-    box-shadow: inset 3px 3px 6px rgba(0,0,0,0.3);
+    box-shadow: inset 3px 3px 8px rgba(0,0,0,0.3);
   }
 
   /* 居間の静止画背景 */
@@ -64,120 +54,52 @@
     opacity: 0.85;
   }
 
-  /* --- キャラ配置エリア (★巨大化解消：サイズを小さく固定★) --- */
+  /* --- キャラ配置エリア --- */
   .okan-container {
     position: absolute;
-    width: calc(var(--p-size) * 16); /* 32px: 巨大化解消、image_19.pngのサイズへ戻す */
-    height: calc(var(--p-size) * 20); /* 40px: 巨大化解消、image_19.pngのサイズへ戻す */
-    transition: all 0.2s steps(4); /* カクカク移動 */
+    width: 80px;
+    height: 80px;
+    transition: all 0.2s steps(4), transform 0.2s ease-in-out; /* 移動と回転のアニメーション */
     z-index: 10;
   }
 
   /* 位置設定 */
-  .pos-tv { top: 75px; right: 35px; }
-  .pos-chabudai-left { top: 105px; left: 15px; }
-  .pos-chabudai-right { top: 105px; right: 35px; }
-  .pos-center { top: 90px; left: 35%; }
+  .pos-tv { top: 50px; right: 5px; }
+  .pos-chabudai-left { top: 85px; left: 0px; }
+  .pos-chabudai-right { top: 85px; right: 5px; }
+  .pos-center { top: 60px; left: 32%; }
 
-  /* -------------------------------------
-     ✨ 精巧1マス打ちドット絵オカン ✨
-     (巨大化・崩れを防止)
-  ------------------------------------- */
-
-  /* 1. 立ち姿オカン (ふわふわ茶髪パーマ・にっこり口) */
-  .okan-stand {
-    position: relative;
-    width: 100%; height: 100%;
-  }
-  .okan-stand::after {
-    content: ''; position: absolute;
-    width: var(--p-size); height: var(--p-size);
-    /* box-shadowで精密ドット打ち：茶髪パーマ、ニコニコ顔、割烹着、黄色帯 */
-    box-shadow: 
-      /* パーマ */
-      calc(var(--p-size)*4) 0 var(--hair-color), calc(var(--p-size)*5) 0 var(--hair-color), calc(var(--p-size)*6) 0 var(--hair-color), calc(var(--p-size)*7) 0 var(--hair-color),
-      calc(var(--p-size)*3) calc(var(--p-size)*1) var(--hair-color), calc(var(--p-size)*4) calc(var(--p-size)*1) var(--hair-color), calc(var(--p-size)*7) calc(var(--p-size)*1) var(--hair-color), calc(var(--p-size)*8) calc(var(--p-size)*1) var(--hair-color),
-      calc(var(--p-size)*2) calc(var(--p-size)*2) var(--hair-color), calc(var(--p-size)*9) calc(var(--p-size)*2) var(--hair-color),
-      calc(var(--p-size)*1) calc(var(--p-size)*3) var(--hair-color), calc(var(--p-size)*10) calc(var(--p-size)*3) var(--hair-color),
-      /* 顔 */
-      calc(var(--p-size)*2) calc(var(--p-size)*4) var(--skin-color), calc(var(--p-size)*3) calc(var(--p-size)*4) var(--pixel-color), calc(var(--p-size)*8) calc(var(--p-size)*4) var(--pixel-color), calc(var(--p-size)*9) calc(var(--p-size)*4) var(--skin-color),
-      calc(var(--p-size)*2) calc(var(--p-size)*5) var(--skin-color), calc(var(--p-size)*3) calc(var(--p-size)*5) var(--skin-color), calc(var(--p-size)*8) calc(var(--p-size)*5) var(--skin-color), calc(var(--p-size)*9) calc(var(--p-size)*5) var(--skin-color),
-      calc(var(--p-size)*2) calc(var(--p-size)*6) var(--skin-color), calc(var(--p-size)*3) calc(var(--p-size)*6) var(--skin-color), calc(var(--p-size)*4) calc(var(--p-size)*6) var(--pixel-color), calc(var(--p-size)*7) calc(var(--p-size)*6) var(--pixel-color), calc(var(--p-size)*8) calc(var(--p-size)*6) var(--skin-color), calc(var(--p-size)*9) calc(var(--p-size)*6) var(--skin-color), /* 目 */
-      calc(var(--p-size)*2) calc(var(--p-size)*7) var(--skin-color), calc(var(--p-size)*3) calc(var(--p-size)*7) var(--skin-color), calc(var(--p-size)*8) calc(var(--p-size)*7) var(--skin-color), calc(var(--p-size)*9) calc(var(--p-size)*7) var(--skin-color),
-      calc(var(--p-size)*4) calc(var(--p-size)*8) var(--pixel-color), calc(var(--p-size)*5) calc(var(--p-size)*8) var(--pixel-color), calc(var(--p-size)*6) calc(var(--p-size)*8) var(--pixel-color), calc(var(--p-size)*7) calc(var(--p-size)*8) var(--pixel-color), /* にっこり口 */
-      calc(var(--p-size)*4) calc(var(--p-size)*9) var(--skin-color), calc(var(--p-size)*5) calc(var(--p-size)*9) var(--skin-color), calc(var(--p-size)*6) calc(var(--p-size)*9) var(--skin-color), calc(var(--p-size)*7) calc(var(--p-size)*9) var(--skin-color),
-      /* 割烹着体 */
-      calc(var(--p-size)*1) calc(var(--p-size)*10) #fff, calc(var(--p-size)*2) calc(var(--p-size)*10) #fff, calc(var(--p-size)*9) calc(var(--p-size)*10) #fff, calc(var(--p-size)*10) calc(var(--p-size)*10) #fff,
-      0 calc(var(--p-size)*11) #fff, calc(var(--p-size)*11) calc(var(--p-size)*11) #fff,
-      0 calc(var(--p-size)*12) #fff, calc(var(--p-size)*1) calc(var(--p-size)*12) var(--obi-color), calc(var(--p-size)*10) calc(var(--p-size)*12) var(--obi-color), calc(var(--p-size)*11) calc(var(--p-size)*12) #fff,
-      0 calc(var(--p-size)*13) #fff, calc(var(--p-size)*11) calc(var(--p-size)*13) #fff,
-      calc(var(--p-size)*1) calc(var(--p-size)*15) #fff, calc(var(--p-size)*10) calc(var(--p-size)*15) #fff,
-      calc(var(--p-size)*2) calc(var(--p-size)*17) #fff, calc(var(--p-size)*9) calc(var(--p-size)*17) #fff,
-      /* 足 */
-      calc(var(--p-size)*2) calc(var(--p-size)*18) var(--skin-color), calc(var(--p-size)*9) calc(var(--p-size)*18) var(--skin-color),
-      calc(var(--p-size)*1) calc(var(--p-size)*19) var(--pixel-color), calc(var(--p-size)*2) calc(var(--p-size)*19) var(--pixel-color), calc(var(--p-size)*9) calc(var(--p-size)*19) var(--pixel-color), calc(var(--p-size)*10) calc(var(--p-size)*19) var(--pixel-color)
-    ;
+  /* ★【新規】寝転がりポーズ（立ち姿を90度回転）★ */
+  .okan-container.pose-lay {
+    transform: rotate(90deg); /* 90度右に倒す */
   }
 
-  /* -------------------------------------
-     ⭐ 完全解決：ごろ寝オカン ⭐
-     (風貌固定・耳横手添え・巨大化なし)
-  ------------------------------------- */
-  .okan-lay {
-    position: relative;
-    width: 100%; height: 100%;
-    display: none;
-  }
-  .okan-lay::after {
-    content: ''; position: absolute;
-    width: var(--p-size); height: var(--p-size);
-    top: calc(var(--p-size) * 4); /* 頭を下に下げる */
-    /* ごろ寝：こっち向き顔、パーマ、耳横の手、投げ出した足 (崩れ無し、画像17の配色・表情) */
-    box-shadow:
-      /* パーマ (立ち姿のモコモコを寝かせた配置) */
-      calc(var(--p-size)*0) calc(var(--p-size)*3) var(--hair-color), calc(var(--p-size)*1) calc(var(--p-size)*3) var(--hair-color), calc(var(--p-size)*2) calc(var(--p-size)*3) var(--hair-color), calc(var(--p-size)*3) calc(var(--p-size)*3) var(--hair-color),
-      calc(var(--p-size)*1) calc(var(--p-size)*4) var(--hair-color), calc(var(--p-size)*2) calc(var(--p-size)*4) var(--hair-color), calc(var(--p-size)*3) calc(var(--p-size)*4) var(--hair-color), calc(var(--p-size)*4) calc(var(--p-size)*4) var(--hair-color),
-      calc(var(--p-size)*2) calc(var(--p-size)*5) var(--hair-color), calc(var(--p-size)*11) calc(var(--p-size)*5) var(--hair-color),
-      calc(var(--p-size)*3) calc(var(--p-size)*6) var(--hair-color), calc(var(--p-size)*12) calc(var(--p-size)*6) var(--hair-color),
-      /* 顔 (正面向き、立ち姿と同じ配色・表情) */
-      calc(var(--p-size)*4) calc(var(--p-size)*7) var(--skin-color), calc(var(--p-size)*5) calc(var(--p-size)*7) var(--pixel-color), calc(var(--p-size)*8) calc(var(--p-size)*7) var(--pixel-color), calc(var(--p-size)*9) calc(var(--p-size)*7) var(--skin-color), /* 目 */
-      calc(var(--p-size)*4) calc(var(--p-size)*8) var(--skin-color), calc(var(--p-size)*9) calc(var(--p-size)*8) var(--skin-color),
-      calc(var(--p-size)*5) calc(var(--p-size)*9) var(--pixel-color), calc(var(--p-size)*6) calc(var(--p-size)*9) var(--pixel-color), calc(var(--p-size)*7) calc(var(--p-size)*9) var(--pixel-color), calc(var(--p-size)*8) calc(var(--p-size)*9) var(--pixel-color), /* にっこり口 (ω口を解消) */
-      /* 耳横に添えた手 (頬杖解消) */
-      calc(var(--p-size)*0) calc(var(--p-size)*7) var(--skin-color), calc(var(--p-size)*1) calc(var(--p-size)*7) var(--skin-color),
-      calc(var(--p-size)*0) calc(var(--p-size)*8) var(--skin-color), calc(var(--p-size)*1) calc(var(--p-size)*8) var(--skin-color),
-      /* 割烹着体 (横たわってる、配色統一) */
-      calc(var(--p-size)*10) calc(var(--p-size)*7) #fff, calc(var(--p-size)*11) calc(var(--p-size)*7) #fff, calc(var(--p-size)*12) calc(var(--p-size)*7) #fff,
-      calc(var(--p-size)*4) calc(var(--p-size)*10) #fff, calc(var(--p-size)*5) calc(var(--p-size)*10) #fff, calc(var(--p-size)*6) calc(var(--p-size)*10) #fff, calc(var(--p-size)*7) calc(var(--p-size)*10) #fff, calc(var(--p-size)*8) calc(var(--p-size)*10) #fff, calc(var(--p-size)*9) calc(var(--p-size)*10) #fff,
-      calc(var(--p-size)*5) calc(var(--p-size)*11) #fff, calc(var(--p-size)*6) calc(var(--p-size)*11) var(--obi-color), calc(var(--p-size)*7) calc(var(--p-size)*11) var(--obi-color), calc(var(--p-size)*10) calc(var(--p-size)*11) #fff,
-      calc(var(--p-size)*6) calc(var(--p-size)*12) #fff, calc(var(--p-size)*9) calc(var(--p-size)*12) #fff,
-      /* 投げ出した素足 (土踏まずドット付き) */
-      calc(var(--p-size)*10) calc(var(--p-size)*12) var(--skin-color), calc(var(--p-size)*11) calc(var(--p-size)*12) var(--skin-color), calc(var(--p-size)*12) calc(var(--p-size)*12) var(--skin-color), calc(var(--p-size)*13) calc(var(--p-size)*12) var(--skin-color),
-      calc(var(--p-size)*13) calc(var(--p-size)*11) var(--pixel-color), calc(var(--p-size)*14) calc(var(--p-size)*11) var(--pixel-color), calc(var(--p-size)*13) calc(var(--p-size)*13) var(--pixel-color), calc(var(--p-size)*14) calc(var(--p-size)*13) var(--pixel-color)
-    ;
+  /* 寝転がり時の位置微調整（おならや移動先） */
+  .okan-container.pos-chabudai-left.pose-lay {
+    top: 100px; /* 少し下に下げる */
+    left: 20px;  /* 少し右に寄せる */
   }
 
-  /* おならドット */
-  .fart-puff {
+  /* おならアニメーション */
+  .fart-cloud {
     position: absolute;
-    width: calc(var(--p-size) * 3);
-    height: calc(var(--p-size) * 3);
-    border-radius: 50%;
-    background-color: var(--pixel-color);
-    transition: all 0.1s;
+    top: 40px; right: -12px;
+    width: 24px; height: 24px;
     opacity: 0;
+    z-index: 15;
   }
-  .pos-chabudai-left .fart-puff { /* ごろ寝時の尻 */
-    bottom: calc(var(--p-size) * 3);
-    left: calc(var(--p-size) * 11);
-  }
-  .fart-active {
-    opacity: 1;
-    animation: fart-animation 0.5s steps(2) infinite; /* 点滅 */
-  }
-  @keyframes fart-animation { 0% { opacity: 1; } 100% { opacity: 0; } }
 
-  /* 掃除アニメーション (DQ風カクカク移動) */
+  .fart-active {
+    animation: fart-pop 1s steps(3) infinite;
+  }
+
+  @keyframes fart-pop {
+    0% { opacity: 0; transform: scale(0.6) translate(0, 0); }
+    50% { opacity: 1; transform: scale(1.1) translate(6px, -4px); }
+    100% { opacity: 0; transform: scale(1.3) translate(12px, -8px); }
+  }
+
+  /* 掃除アニメーション */
   @keyframes clean-dq {
     0% { left: 5px; top: 85px; transform: scaleX(1); }
     50% { left: 175px; top: 60px; transform: scaleX(-1); }
@@ -190,8 +112,8 @@
   .dialogue-box {
     position: absolute; bottom: 0; left: 0; right: 0;
     height: 35px;
-    background: var(--bg-color);
-    border-top: 2px solid #2d481e;
+    background: #bce0a8;
+    border-top: 3px solid #2d481e;
     font-size: 11px; font-weight: bold;
     color: #1a330e;
     display: flex; align-items: center; justify-content: center;
@@ -208,8 +130,8 @@
 
   button {
     background-color: #fff; color: #000; border: 3px solid #000;
-    padding: 10px; font-weight: bold; cursor: pointer;
-    font-size: 12px; border-radius: 10px;
+    padding: 10px 4px; font-weight: bold; cursor: pointer;
+    font-size: 11px; border-radius: 10px;
     box-shadow: 0 3px 0 #000;
   }
   button:active { box-shadow: 0 0 0 #000; transform: translateY(3px); }
@@ -220,43 +142,81 @@
 <div class="game-container" id="game" style="display:none;">
   <div class="screen">
     
-    <!-- 和室 背景 (ドット絵📺付き) -->
+    <!-- 🖼️ 昭和の居間 背景 -->
     <svg class="room-svg" viewBox="0 0 200 160" xmlns="http://www.w3.org/2000/svg">
       <rect x="0" y="0" width="200" height="110" fill="#a3c98f"/>
       <line x1="0" y1="30" x2="200" y2="30" stroke="#2d481e" stroke-width="1" opacity="0.3"/>
       <line x1="0" y1="70" x2="200" y2="70" stroke="#2d481e" stroke-width="1" opacity="0.3"/>
       
-      <!-- テレビ (右奥) -->
+      <circle cx="30" cy="40" r="18" fill="none" stroke="#2d481e" stroke-width="2"/>
+      <line x1="30" y1="22" x2="30" y2="58" stroke="#2d481e" stroke-width="1"/>
+      <line x1="12" y1="40" x2="48" y2="40" stroke="#2d481e" stroke-width="1"/>
+
+      <rect x="85" y="10" width="30" height="50" fill="none" stroke="#2d481e" stroke-width="1.5"/>
+      <rect x="90" y="18" width="20" height="34" fill="#2d481e" opacity="0.15"/>
+      <text x="94" y="38" font-size="8" fill="#2d481e" font-weight="bold">富士</text>
+
       <rect x="150" y="35" width="40" height="30" rx="3" fill="#3a5a28" stroke="#2d481e" stroke-width="2"/>
       <rect x="154" y="39" width="24" height="22" rx="2" fill="#88af74"/>
       <circle cx="183" cy="44" r="2" fill="#2d481e"/>
       <circle cx="183" cy="52" r="2" fill="#2d481e"/>
+      <line x1="160" y1="35" x2="152" y2="20" stroke="#2d481e" stroke-width="1.5"/>
+      <line x1="170" y1="35" x2="178" y2="20" stroke="#2d481e" stroke-width="1.5"/>
+      <line x1="156" y1="65" x2="152" y2="72" stroke="#2d481e" stroke-width="2"/>
+      <line x1="184" y1="65" x2="188" y2="72" stroke="#2d481e" stroke-width="2"/>
 
-      <!-- 床 -->
       <rect x="0" y="110" width="200" height="50" fill="#88af74"/>
       <line x1="0" y1="110" x2="200" y2="110" stroke="#2d481e" stroke-width="2"/>
       <line x1="0" y1="135" x2="200" y2="135" stroke="#2d481e" stroke-width="3" stroke-dasharray="8,4"/>
       <line x1="100" y1="110" x2="100" y2="135" stroke="#2d481e" stroke-width="1.5"/>
 
-      <!-- ちゃぶ台 (中央・影) -->
-      <ellipse cx="100" cy="125" rx="40" ry="12" fill="#795548" opacity="0.7"/>
-
-      <!-- 額縁 (富士山) -->
-      <rect x="90" y="10" width="20" height="30" fill="none" stroke="#2d481e" stroke-width="1.5"/>
-      <path d="M92,30 l4,-6 l2,2 l4,-4 l2,4 z" fill="#2d481e" opacity="0.15"/>
+      <ellipse cx="100" cy="125" rx="40" ry="12" fill="#bce0a8" stroke="#2d481e" stroke-width="2"/>
+      <line x1="70" y1="133" x2="68" y2="142" stroke="#2d481e" stroke-width="2"/>
+      <line x1="130" y1="133" x2="132" y2="142" stroke="#2d481e" stroke-width="2"/>
+      <rect x="92" y="115" width="8" height="6" rx="1" fill="#2d481e"/>
+      <path d="M 100 118 Q 104 117 103 121" fill="none" stroke="#2d481e" stroke-width="1"/>
+      <rect x="106" y="117" width="4" height="4" fill="#2d481e"/>
     </svg>
 
-    <!-- ✨ 崩れない！はみ出さない！完全1マス打ちドット絵オカン ✨ -->
+    <!-- 👾 キャラ配置エリア -->
     <div id="okan-container" class="okan-container pos-tv">
       
-      <!-- 1. 立ち姿オカン (ふわふわ茶髪パーマ・にっこり口) -->
-      <div id="okan-stand" class="okan-stand"></div>
+      <!-- ★立ち姿オカン (ふわふわ茶髪パーマ) のみ残す★ -->
+      <svg id="okan-stand" viewBox="0 0 32 32" style="width:100%; height:100%; shape-rendering: crispEdges;">
+        <!-- パーマ髪（茶色・モコモコ感） -->
+        <path d="M 10 3 H 22 V 4 H 24 V 6 H 25 V 10 H 24 V 12 H 8 V 10 H 7 V 6 H 8 V 4 H 10 Z" fill="#795548"/>
+        <path d="M 11 4 H 21 V 5 H 23 V 7 H 24 V 9 H 23 V 11 H 9 V 9 H 8 V 7 H 9 V 5 Z" fill="#a1887f"/>
+        
+        <!-- 顔 -->
+        <rect x="9" y="11" width="14" height="8" fill="#ffdfc4"/>
+        <!-- 目・眉・ほっぺ・口 -->
+        <rect x="11" y="13" width="3" height="1" fill="#222"/>
+        <rect x="18" y="13" width="3" height="1" fill="#222"/>
+        <rect x="10" y="15" width="2" height="1" fill="#ff8a80"/>
+        <rect x="20" y="15" width="2" height="1" fill="#ff8a80"/>
+        <rect x="14" y="17" width="4" height="1" fill="#d32f2f"/>
 
-      <!-- 2. ごろ寝オカン (風貌固定・耳横手添え・巨大化なし) -->
-      <div id="okan-lay" class="okan-lay"></div>
+        <!-- 服（割烹着） -->
+        <rect x="8" y="19" width="16" height="10" fill="#ffffff"/>
+        <!-- 黄色帯 -->
+        <rect x="8" y="22" width="16" height="2" fill="#fbc02d"/>
+        <!-- 足 -->
+        <rect x="10" y="29" width="3" height="3" fill="#ffdfc4"/>
+        <rect x="19" y="29" width="3" height="3" fill="#ffdfc4"/>
 
-      <!-- おならドット -->
-      <div id="fart-puff" class="fart-puff"></div>
+        <!-- 輪郭線 -->
+        <path d="M 10 3 H 22 V 4 H 24 V 6 H 25 V 10 H 24 V 12 H 8 V 10 H 7 V 6 H 8 V 4 Z" 
+              fill="none" stroke="#111" stroke-width="0.8"/>
+      </svg>
+
+      <!-- ★元の `#okan-lay`（ごろ寝ドット絵）は削除しました★ -->
+
+      <!-- 💨 ドット絵おなら雲 -->
+      <svg id="fart-cloud" class="fart-cloud" viewBox="0 0 16 16" style="shape-rendering: crispEdges;">
+        <path d="M4 6h8v1h2v2h-1v2h-2v1H5v-1H3v-2H2V7h2V6z" fill="#ffffff" stroke="#222" stroke-width="1"/>
+        <circle cx="3" cy="12" r="1" fill="#222"/>
+        <circle cx="1" cy="14" r="0.8" fill="#222"/>
+      </svg>
     </div>
 
     <!-- メッセージ -->
@@ -278,7 +238,6 @@
 </div>
 
 <script>
-  // 合言葉入力
   const pass = prompt("合言葉を入力してね (初期値: 1234)");
   if(pass === "1234") {
     document.getElementById("game").style.display = "block";
@@ -297,22 +256,21 @@
     "テレビのチャンネル、そこ変えないでよ"
   ];
 
-  // 行動パターンと配色 (風貌固定、茶髪パーマ)
   const idleStates = [
     { pos: "pos-tv", pose: "stand", text: "テレビのワイドショーに夢中", state: "テレビ鑑賞" },
     { pos: "pos-chabudai-left", pose: "lay", text: "ちゃぶ台の横でゴロゴロ寝転がっている", state: "ゴロゴロ居眠り" },
     { pos: "pos-center", pose: "stand", text: "畳の上でぼーっとしている", state: "休憩中" }
   ];
 
+  /* ★【修正】JavaScriptのポーズ切り替え関数★ */
   function setPose(poseType) {
-    const standSvg = document.getElementById("okan-stand");
-    const laySvg = document.getElementById("okan-lay");
+    const container = document.getElementById("okan-container");
+    // 元のSVG表示切り替えロジックは削除
+    
     if(poseType === "stand") {
-      standSvg.style.display = "block";
-      laySvg.style.display = "none";
+      container.classList.remove("pose-lay"); // 通常（立ち姿）
     } else {
-      standSvg.style.display = "none";
-      laySvg.style.display = "block";
+      container.classList.add("pose-lay");    // 寝転がり（CSSで90度回転）
     }
   }
 
@@ -324,7 +282,7 @@
     document.getElementById("weight-val").innerText = weight.toFixed(1);
   }
 
-  // 4秒ごとに自動行動
+  // 自動行動
   setInterval(() => {
     if (isBusy) return;
     const action = idleStates[Math.floor(Math.random() * idleStates.length)];
@@ -340,20 +298,23 @@
     if (Math.random() < 0.4) {
       isBusy = true;
       const container = document.getElementById("okan-container");
-      const fart = document.getElementById("fart-puff");
+      const fart = document.getElementById("fart-cloud");
 
+      // 横倒しで座布団へ
       container.className = "okan-container pos-chabudai-left";
       setPose("lay");
 
       setTimeout(() => {
-        fart.className = "fart-puff fart-active";
-        document.getElementById("dialogue").innerText = "……ス〜……プッ💨 あらやだ！";
+        fart.className = "fart-cloud fart-active";
+        document.getElementById("dialogue").innerText = "……ス～……プッ💨 あらやだ！";
         document.getElementById("state-val").innerText = "放屁(ごろ寝中)";
       }, 300);
 
       setTimeout(() => {
-        fart.className = "fart-puff";
+        fart.className = "fart-cloud";
         isBusy = false;
+        // おなら終わったら自動で立ち姿に戻る（任意）
+        // setPose("stand");
       }, 3200);
       return true;
     }
@@ -376,7 +337,9 @@
     mood = Math.min(100, mood + 10); weight += 0.5;
     isBusy = true;
     const container = document.getElementById("okan-container");
+    // ちゃぶ台横へ移動
     container.className = "okan-container pos-chabudai-left";
+    // ★横倒しポーズにする★
     setPose("lay");
     document.getElementById("dialogue").innerText = "寝っ転がって食べるおせんべいが最高";
     document.getElementById("state-val").innerText = "寝ながら間食";
@@ -388,12 +351,13 @@
     mood = Math.max(0, mood - 10); weight = Math.max(40, weight - 0.4);
     isBusy = true;
     const container = document.getElementById("okan-container");
-    container.className = "okan-container anim-cleaning pos-center";
+    container.className = "okan-container anim-cleaning";
     setPose("stand");
     document.getElementById("dialogue").innerText = "はいはい、掃除すればいいんでしょ！";
     document.getElementById("state-val").innerText = "部屋を掃除中";
     updateDisplay();
     setTimeout(() => {
+      container.className = "okan-container pos-center";
       isBusy = false;
     }, 4000);
   }
