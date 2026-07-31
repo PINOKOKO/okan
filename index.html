@@ -10,11 +10,11 @@
 <title>オカン育成</title>
 <style>
   :root {
-    --bg-color: #bce0a8;
-    --pixel-color: #1a1a1a;
-    --hair-color: #795548;
-    --skin-color: #ffdfc4;
-    --obi-color: #fbc02d;
+    --bg-color: #bce0a8; /* レトロ液晶背景 */
+    --pixel-color: #1a1a1a; /* ドット黒 */
+    --hair-color: #795548; /* 茶髪 */
+    --skin-color: #ffdfc4; /* 肌 */
+    --obi-color: #fbc02d; /* 帯 */
     --p-size: 2px; /* 1ピクセルの大きさ */
   }
 
@@ -57,31 +57,31 @@
     box-shadow: inset 3px 3px 6px rgba(0,0,0,0.3);
   }
 
-  /* 昭和の居間 背景 (ドット家具付き) */
+  /* 居間の静止画背景 */
   .room-svg {
     position: absolute;
     top: 0; left: 0; width: 100%; height: 195px;
     opacity: 0.85;
   }
 
-  /* --- キャラ配置エリア --- */
+  /* --- キャラ配置エリア (★巨大化解消：サイズを小さく固定★) --- */
   .okan-container {
     position: absolute;
-    width: calc(var(--p-size) * 16);
-    height: calc(var(--p-size) * 20);
-    transition: all 0.2s steps(4);
+    width: calc(var(--p-size) * 16); /* 32px: 巨大化解消、image_19.pngのサイズへ戻す */
+    height: calc(var(--p-size) * 20); /* 40px: 巨大化解消、image_19.pngのサイズへ戻す */
+    transition: all 0.2s steps(4); /* カクカク移動 */
     z-index: 10;
   }
 
   /* 位置設定 */
-  .pos-tv { top: 50px; right: 5px; }
-  .pos-chabudai-left { top: 85px; left: 0px; }
-  .pos-chabudai-right { top: 85px; right: 5px; }
-  .pos-center { top: 60px; left: 32%; }
+  .pos-tv { top: 75px; right: 35px; }
+  .pos-chabudai-left { top: 105px; left: 15px; }
+  .pos-chabudai-right { top: 105px; right: 35px; }
+  .pos-center { top: 90px; left: 35%; }
 
   /* -------------------------------------
      ✨ 精巧1マス打ちドット絵オカン ✨
-     (絶対に崩れません)
+     (巨大化・崩れを防止)
   ------------------------------------- */
 
   /* 1. 立ち姿オカン (ふわふわ茶髪パーマ・にっこり口) */
@@ -92,7 +92,7 @@
   .okan-stand::after {
     content: ''; position: absolute;
     width: var(--p-size); height: var(--p-size);
-    /* 立ち姿：茶髪パーマ、ニコニコ顔、割烹着、黄色帯 */
+    /* box-shadowで精密ドット打ち：茶髪パーマ、ニコニコ顔、割烹着、黄色帯 */
     box-shadow: 
       /* パーマ */
       calc(var(--p-size)*4) 0 var(--hair-color), calc(var(--p-size)*5) 0 var(--hair-color), calc(var(--p-size)*6) 0 var(--hair-color), calc(var(--p-size)*7) 0 var(--hair-color),
@@ -120,7 +120,7 @@
   }
 
   /* -------------------------------------
-     ⭐ 完璧解決：ごろ寝オカン ⭐
+     ⭐ 完全解決：ごろ寝オカン ⭐
      (風貌固定・耳横手添え・巨大化なし)
   ------------------------------------- */
   .okan-lay {
@@ -132,17 +132,17 @@
     content: ''; position: absolute;
     width: var(--p-size); height: var(--p-size);
     top: calc(var(--p-size) * 4); /* 頭を下に下げる */
-    /* ごろ寝：こっち向き顔、パーマ、耳横の手、投げ出した足 (崩れ無し) */
+    /* ごろ寝：こっち向き顔、パーマ、耳横の手、投げ出した足 (崩れ無し、画像17の配色・表情) */
     box-shadow:
       /* パーマ (立ち姿のモコモコを寝かせた配置) */
       calc(var(--p-size)*0) calc(var(--p-size)*3) var(--hair-color), calc(var(--p-size)*1) calc(var(--p-size)*3) var(--hair-color), calc(var(--p-size)*2) calc(var(--p-size)*3) var(--hair-color), calc(var(--p-size)*3) calc(var(--p-size)*3) var(--hair-color),
       calc(var(--p-size)*1) calc(var(--p-size)*4) var(--hair-color), calc(var(--p-size)*2) calc(var(--p-size)*4) var(--hair-color), calc(var(--p-size)*3) calc(var(--p-size)*4) var(--hair-color), calc(var(--p-size)*4) calc(var(--p-size)*4) var(--hair-color),
       calc(var(--p-size)*2) calc(var(--p-size)*5) var(--hair-color), calc(var(--p-size)*11) calc(var(--p-size)*5) var(--hair-color),
       calc(var(--p-size)*3) calc(var(--p-size)*6) var(--hair-color), calc(var(--p-size)*12) calc(var(--p-size)*6) var(--hair-color),
-      /* 顔 (立ち姿と同じにっこり表情) */
+      /* 顔 (正面向き、立ち姿と同じ配色・表情) */
       calc(var(--p-size)*4) calc(var(--p-size)*7) var(--skin-color), calc(var(--p-size)*5) calc(var(--p-size)*7) var(--pixel-color), calc(var(--p-size)*8) calc(var(--p-size)*7) var(--pixel-color), calc(var(--p-size)*9) calc(var(--p-size)*7) var(--skin-color), /* 目 */
       calc(var(--p-size)*4) calc(var(--p-size)*8) var(--skin-color), calc(var(--p-size)*9) calc(var(--p-size)*8) var(--skin-color),
-      calc(var(--p-size)*5) calc(var(--p-size)*9) var(--pixel-color), calc(var(--p-size)*6) calc(var(--p-size)*9) var(--pixel-color), calc(var(--p-size)*7) calc(var(--p-size)*9) var(--pixel-color), calc(var(--p-size)*8) calc(var(--p-size)*9) var(--pixel-color), /* にっこり口 */
+      calc(var(--p-size)*5) calc(var(--p-size)*9) var(--pixel-color), calc(var(--p-size)*6) calc(var(--p-size)*9) var(--pixel-color), calc(var(--p-size)*7) calc(var(--p-size)*9) var(--pixel-color), calc(var(--p-size)*8) calc(var(--p-size)*9) var(--pixel-color), /* にっこり口 (ω口を解消) */
       /* 耳横に添えた手 (頬杖解消) */
       calc(var(--p-size)*0) calc(var(--p-size)*7) var(--skin-color), calc(var(--p-size)*1) calc(var(--p-size)*7) var(--skin-color),
       calc(var(--p-size)*0) calc(var(--p-size)*8) var(--skin-color), calc(var(--p-size)*1) calc(var(--p-size)*8) var(--skin-color),
@@ -252,7 +252,7 @@
       <!-- 1. 立ち姿オカン (ふわふわ茶髪パーマ・にっこり口) -->
       <div id="okan-stand" class="okan-stand"></div>
 
-      <!-- 2. ごろ寝オカン (風貌固定・耳横手添え・崩れ無し) -->
+      <!-- 2. ごろ寝オカン (風貌固定・耳横手添え・巨大化なし) -->
       <div id="okan-lay" class="okan-lay"></div>
 
       <!-- おならドット -->
@@ -278,7 +278,7 @@
 </div>
 
 <script>
-  // 合言葉
+  // 合言葉入力
   const pass = prompt("合言葉を入力してね (初期値: 1234)");
   if(pass === "1234") {
     document.getElementById("game").style.display = "block";
@@ -324,7 +324,7 @@
     document.getElementById("weight-val").innerText = weight.toFixed(1);
   }
 
-  // 自動行動
+  // 4秒ごとに自動行動
   setInterval(() => {
     if (isBusy) return;
     const action = idleStates[Math.floor(Math.random() * idleStates.length)];
