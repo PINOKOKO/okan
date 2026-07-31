@@ -5,15 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="オカンといっしょ">
+<meta name="apple-mobile-web-app-title" content="オカン育成">
 
-<title>オカンといっしょ</title>
+<title>オカン育成</title>
 <style>
-  /* 共通設定 (1ピクセルを大きく見せる) */
   :root {
     --bg-color: #9bbc0f; /* 液晶背景 */
     --pixel-color: #0f380f; /* ドット黒 */
-    --p-size: 2px; /* 1ピクセルの大きさ */
+    --p-size: 2px; /* 1ピクセルの基本サイズ */
   }
 
   body {
@@ -29,7 +28,6 @@
     -webkit-user-select: none;
   }
 
-  /* 本体フレーム（少しレトロな白） */
   .game-container {
     background-color: #e0e0d0;
     border: calc(var(--p-size) * 3) solid #444;
@@ -42,7 +40,6 @@
     position: relative;
   }
 
-  /* 液晶画面 */
   .screen {
     background-color: var(--bg-color);
     color: var(--pixel-color);
@@ -55,14 +52,19 @@
     box-shadow: inset 3px 3px 6px rgba(0,0,0,0.3);
   }
 
-  /* --- 部屋の背景と家具 (すべてCSS box-shadowドット絵) --- */
+  /* --- 昭和の居間 背景 (畳・掛け軸・テレビ・黒電話・ちゃぶ台) --- */
   .room-bg {
     position: absolute;
     top: 0; left: 0; right: 0; bottom: 35px;
-    border-bottom: var(--p-size) solid var(--pixel-color);
   }
 
-  /* 家具共通スタイル */
+  /* 畳の床線 */
+  .tatami-floor {
+    position: absolute;
+    bottom: 0; left: 0; right: 0; height: 70px;
+    border-top: var(--p-size) solid var(--pixel-color);
+  }
+
   .furniture { position: absolute; background: transparent; }
   .furniture::after {
     content: ''; position: absolute;
@@ -70,203 +72,189 @@
     background: transparent;
   }
 
-  /* 精巧なテレビ (アンテナ・画面・スピーカー・脚) */
-  .tv-set { top: 15px; left: 15px; width: calc(var(--p-size)*14); height: calc(var(--p-size)*10); }
+  /* 掛け軸 (壁の中央) */
+  .kakejiku { top: 8px; left: 42%; width: calc(var(--p-size)*10); }
+  .kakejiku::after {
+    box-shadow:
+      calc(var(--p-size)*2) calc(var(--p-size)*0) var(--pixel-color), calc(var(--p-size)*7) calc(var(--p-size)*0) var(--pixel-color),
+      calc(var(--p-size)*2) calc(var(--p-size)*1) var(--pixel-color), calc(var(--p-size)*7) calc(var(--p-size)*1) var(--pixel-color),
+      calc(var(--p-size)*0) calc(var(--p-size)*2) var(--pixel-color), calc(var(--p-size)*9) calc(var(--p-size)*2) var(--pixel-color),
+      calc(var(--p-size)*0) calc(var(--p-size)*12) var(--pixel-color), calc(var(--p-size)*9) calc(var(--p-size)*12) var(--pixel-color),
+      /* 文字「家内安全」風の点 */
+      calc(var(--p-size)*4) calc(var(--p-size)*4) var(--pixel-color), calc(var(--p-size)*5) calc(var(--p-size)*4) var(--pixel-color),
+      calc(var(--p-size)*4) calc(var(--p-size)*7) var(--pixel-color), calc(var(--p-size)*5) calc(var(--p-size)*7) var(--pixel-color),
+      calc(var(--p-size)*4) calc(var(--p-size)*10) var(--pixel-color), calc(var(--p-size)*5) calc(var(--p-size)*10) var(--pixel-color)
+    ;
+  }
+
+  /* テレビ (右奥) */
+  .tv-set { top: 15px; right: 12px; }
   .tv-set::after {
     box-shadow: 
-      /* アンテナ */
-      calc(var(--p-size)*3) calc(var(--p-size)*-3) var(--pixel-color), calc(var(--p-size)*10) calc(var(--p-size)*-3) var(--pixel-color),
-      calc(var(--p-size)*4) calc(var(--p-size)*-2) var(--pixel-color), calc(var(--p-size)*9) calc(var(--p-size)*-2) var(--pixel-color),
-      calc(var(--p-size)*5) calc(var(--p-size)*-1) var(--pixel-color), calc(var(--p-size)*8) calc(var(--p-size)*-1) var(--pixel-color),
-      /* 本体枠 */
-      calc(var(--p-size)*0) calc(var(--p-size)*0) var(--pixel-color), calc(var(--p-size)*13) calc(var(--p-size)*0) var(--pixel-color),
-      calc(var(--p-size)*0) calc(var(--p-size)*1) var(--pixel-color), calc(var(--p-size)*1) calc(var(--p-size)*1) var(--pixel-color), calc(var(--p-size)*2) calc(var(--p-size)*1) var(--pixel-color), calc(var(--p-size)*3) calc(var(--p-size)*1) var(--pixel-color), calc(var(--p-size)*4) calc(var(--p-size)*1) var(--pixel-color), calc(var(--p-size)*5) calc(var(--p-size)*1) var(--pixel-color), calc(var(--p-size)*6) calc(var(--p-size)*1) var(--pixel-color), calc(var(--p-size)*7) calc(var(--p-size)*1) var(--pixel-color), calc(var(--p-size)*8) calc(var(--p-size)*1) var(--pixel-color), calc(var(--p-size)*9) calc(var(--p-size)*1) var(--pixel-color), calc(var(--p-size)*10) calc(var(--p-size)*1) var(--pixel-color), calc(var(--p-size)*11) calc(var(--p-size)*1) var(--pixel-color), calc(var(--p-size)*12) calc(var(--p-size)*1) var(--pixel-color), calc(var(--p-size)*13) calc(var(--p-size)*1) var(--pixel-color),
-      calc(var(--p-size)*0) calc(var(--p-size)*9) var(--pixel-color), calc(var(--p-size)*1) calc(var(--p-size)*9) var(--pixel-color), calc(var(--p-size)*2) calc(var(--p-size)*9) var(--pixel-color), calc(var(--p-size)*3) calc(var(--p-size)*9) var(--pixel-color), calc(var(--p-size)*4) calc(var(--p-size)*9) var(--pixel-color), calc(var(--p-size)*5) calc(var(--p-size)*9) var(--pixel-color), calc(var(--p-size)*6) calc(var(--p-size)*9) var(--pixel-color), calc(var(--p-size)*7) calc(var(--p-size)*9) var(--pixel-color), calc(var(--p-size)*8) calc(var(--p-size)*9) var(--pixel-color), calc(var(--p-size)*9) calc(var(--p-size)*9) var(--pixel-color), calc(var(--p-size)*10) calc(var(--p-size)*9) var(--pixel-color), calc(var(--p-size)*11) calc(var(--p-size)*9) var(--pixel-color), calc(var(--p-size)*12) calc(var(--p-size)*9) var(--pixel-color), calc(var(--p-size)*13) calc(var(--p-size)*9) var(--pixel-color),
-      /* 画面の中 (砂嵐) */
-      calc(var(--p-size)*2) calc(var(--p-size)*3) var(--pixel-color), calc(var(--p-size)*4) calc(var(--p-size)*3) var(--pixel-color), calc(var(--p-size)*6) calc(var(--p-size)*3) var(--pixel-color), calc(var(--p-size)*8) calc(var(--p-size)*3) var(--pixel-color),
-      calc(var(--p-size)*3) calc(var(--p-size)*5) var(--pixel-color), calc(var(--p-size)*5) calc(var(--p-size)*5) var(--pixel-color), calc(var(--p-size)*7) calc(var(--p-size)*5) var(--pixel-color),
-      calc(var(--p-size)*2) calc(var(--p-size)*7) var(--pixel-color), calc(var(--p-size)*4) calc(var(--p-size)*7) var(--pixel-color), calc(var(--p-size)*6) calc(var(--p-size)*7) var(--pixel-color), calc(var(--p-size)*8) calc(var(--p-size)*7) var(--pixel-color),
-      /* スピーカー・ツマミ */
-      calc(var(--p-size)*11) calc(var(--p-size)*3) var(--pixel-color), calc(var(--p-size)*12) calc(var(--p-size)*3) var(--pixel-color),
-      calc(var(--p-size)*11) calc(var(--p-size)*5) var(--pixel-color), calc(var(--p-size)*12) calc(var(--p-size)*5) var(--pixel-color),
-      calc(var(--p-size)*11) calc(var(--p-size)*7) var(--pixel-color), calc(var(--p-size)*12) calc(var(--p-size)*7) var(--pixel-color),
+      calc(var(--p-size)*2) calc(var(--p-size)*-2) var(--pixel-color), calc(var(--p-size)*8) calc(var(--p-size)*-2) var(--pixel-color),
+      calc(var(--p-size)*0) calc(var(--p-size)*0) var(--pixel-color), calc(var(--p-size)*10) calc(var(--p-size)*0) var(--pixel-color),
+      calc(var(--p-size)*0) calc(var(--p-size)*7) var(--pixel-color), calc(var(--p-size)*10) calc(var(--p-size)*7) var(--pixel-color),
+      /* 画面画面 */
+      calc(var(--p-size)*2) calc(var(--p-size)*2) var(--pixel-color), calc(var(--p-size)*4) calc(var(--p-size)*2) var(--pixel-color),
+      calc(var(--p-size)*3) calc(var(--p-size)*4) var(--pixel-color), calc(var(--p-size)*5) calc(var(--p-size)*4) var(--pixel-color),
       /* 脚 */
-      calc(var(--p-size)*2) calc(var(--p-size)*10) var(--pixel-color), calc(var(--p-size)*11) calc(var(--p-size)*10) var(--pixel-color)
+      calc(var(--p-size)*1) calc(var(--p-size)*8) var(--pixel-color), calc(var(--p-size)*9) calc(var(--p-size)*8) var(--pixel-color)
     ;
   }
 
-  /* 丸い時計 (文字盤・針) */
-  .clock { top: 10px; left: 55%; width: calc(var(--p-size)*10); height: calc(var(--p-size)*10); }
-  .clock::after {
+  /* ダイヤル式黒電話 (左奥) */
+  .phone { top: 35px; left: 15px; }
+  .phone::after {
     box-shadow: 
-      calc(var(--p-size)*4) calc(var(--p-size)*0) var(--pixel-color), calc(var(--p-size)*5) calc(var(--p-size)*0) var(--pixel-color),
-      calc(var(--p-size)*2) calc(var(--p-size)*1) var(--pixel-color), calc(var(--p-size)*7) calc(var(--p-size)*1) var(--pixel-color),
-      calc(var(--p-size)*1) calc(var(--p-size)*2) var(--pixel-color), calc(var(--p-size)*8) calc(var(--p-size)*2) var(--pixel-color),
-      calc(var(--p-size)*0) calc(var(--p-size)*4) var(--pixel-color), calc(var(--p-size)*0) calc(var(--p-size)*5) var(--pixel-color), calc(var(--p-size)*9) calc(var(--p-size)*4) var(--pixel-color), calc(var(--p-size)*9) calc(var(--p-size)*5) var(--pixel-color),
-      /* 文字盤点 */
-      calc(var(--p-size)*4) calc(var(--p-size)*2) var(--pixel-color), calc(var(--p-size)*7) calc(var(--p-size)*4) var(--pixel-color),
-      /* 針 */
-      calc(var(--p-size)*4) calc(var(--p-size)*4) var(--pixel-color), calc(var(--p-size)*4) calc(var(--p-size)*5) var(--pixel-color), calc(var(--p-size)*5) calc(var(--p-size)*5) var(--pixel-color),
-      /* 下枠 */
-      calc(var(--p-size)*2) calc(var(--p-size)*8) var(--pixel-color), calc(var(--p-size)*7) calc(var(--p-size)*8) var(--pixel-color),
-      calc(var(--p-size)*4) calc(var(--p-size)*9) var(--pixel-color), calc(var(--p-size)*5) calc(var(--p-size)*9) var(--pixel-color)
+      /* 受話器 */
+      calc(var(--p-size)*0) calc(var(--p-size)*0) var(--pixel-color), calc(var(--p-size)*1) calc(var(--p-size)*0) var(--pixel-color), calc(var(--p-size)*5) calc(var(--p-size)*0) var(--pixel-color), calc(var(--p-size)*6) calc(var(--p-size)*0) var(--pixel-color),
+      calc(var(--p-size)*2) calc(var(--p-size)*1) var(--pixel-color), calc(var(--p-size)*3) calc(var(--p-size)*1) var(--pixel-color), calc(var(--p-size)*4) calc(var(--p-size)*1) var(--pixel-color),
+      /* ダイヤル本体 */
+      calc(var(--p-size)*1) calc(var(--p-size)*3) var(--pixel-color), calc(var(--p-size)*5) calc(var(--p-size)*3) var(--pixel-color),
+      calc(var(--p-size)*3) calc(var(--p-size)*4) var(--pixel-color) /* ダイヤルの穴 */
     ;
   }
 
-  /* ちゃぶ台 (急須・湯呑み・立体的な脚) */
-  .ちゃぶ台 { bottom: 10px; right: 15px; width: calc(var(--p-size)*18); height: calc(var(--p-size)*10); }
+  /* 中央のちゃぶ台 (急須と湯呑み付き) */
+  .ちゃぶ台 { top: 95px; left: 32%; }
   .ちゃぶ台::after {
     box-shadow: 
       /* 急須・湯呑み */
-      calc(var(--p-size)*5) calc(var(--p-size)*-2) var(--pixel-color), calc(var(--p-size)*6) calc(var(--p-size)*-2) var(--pixel-color),
-      calc(var(--p-size)*4) calc(var(--p-size)*-1) var(--pixel-color), calc(var(--p-size)*7) calc(var(--p-size)*-1) var(--pixel-color), calc(var(--p-size)*10) calc(var(--p-size)*-1) var(--pixel-color),
-      /* 天板 (楕円) */
-      calc(var(--p-size)*3) calc(var(--p-size)*0) var(--pixel-color), calc(var(--p-size)*4) calc(var(--p-size)*0) var(--pixel-color), calc(var(--p-size)*5) calc(var(--p-size)*0) var(--pixel-color), calc(var(--p-size)*6) calc(var(--p-size)*0) var(--pixel-color), calc(var(--p-size)*7) calc(var(--p-size)*0) var(--pixel-color), calc(var(--p-size)*8) calc(var(--p-size)*0) var(--pixel-color), calc(var(--p-size)*9) calc(var(--p-size)*0) var(--pixel-color), calc(var(--p-size)*10) calc(var(--p-size)*0) var(--pixel-color), calc(var(--p-size)*11) calc(var(--p-size)*0) var(--pixel-color), calc(var(--p-size)*12) calc(var(--p-size)*0) var(--pixel-color), calc(var(--p-size)*13) calc(var(--p-size)*0) var(--pixel-color), calc(var(--p-size)*14) calc(var(--p-size)*0) var(--pixel-color),
-      calc(var(--p-size)*1) calc(var(--p-size)*1) var(--pixel-color), calc(var(--p-size)*16) calc(var(--p-size)*1) var(--pixel-color),
-      calc(var(--p-size)*0) calc(var(--p-size)*2) var(--pixel-color), calc(var(--p-size)*0) calc(var(--p-size)*3) var(--pixel-color), calc(var(--p-size)*17) calc(var(--p-size)*2) var(--pixel-color), calc(var(--p-size)*17) calc(var(--p-size)*3) var(--pixel-color),
-      calc(var(--p-size)*1) calc(var(--p-size)*4) var(--pixel-color), calc(var(--p-size)*2) calc(var(--p-size)*4) var(--pixel-color), calc(var(--p-size)*3) calc(var(--p-size)*4) var(--pixel-color), calc(var(--p-size)*4) calc(var(--p-size)*4) var(--pixel-color), calc(var(--p-size)*5) calc(var(--p-size)*4) var(--pixel-color), calc(var(--p-size)*6) calc(var(--p-size)*4) var(--pixel-color), calc(var(--p-size)*7) calc(var(--p-size)*4) var(--pixel-color), calc(var(--p-size)*8) calc(var(--p-size)*4) var(--pixel-color), calc(var(--p-size)*9) calc(var(--p-size)*4) var(--pixel-color), calc(var(--p-size)*10) calc(var(--p-size)*4) var(--pixel-color), calc(var(--p-size)*11) calc(var(--p-size)*4) var(--pixel-color), calc(var(--p-size)*12) calc(var(--p-size)*4) var(--pixel-color), calc(var(--p-size)*13) calc(var(--p-size)*4) var(--pixel-color), calc(var(--p-size)*14) calc(var(--p-size)*4) var(--pixel-color), calc(var(--p-size)*15) calc(var(--p-size)*4) var(--pixel-color), calc(var(--p-size)*16) calc(var(--p-size)*4) var(--pixel-color),
-      /* 脚 */
-      calc(var(--p-size)*3) calc(var(--p-size)*5) var(--pixel-color), calc(var(--p-size)*3) calc(var(--p-size)*6) var(--pixel-color), calc(var(--p-size)*3) calc(var(--p-size)*7) var(--pixel-color), calc(var(--p-size)*3) calc(var(--p-size)*8) var(--pixel-color),
-      calc(var(--p-size)*14) calc(var(--p-size)*5) var(--pixel-color), calc(var(--p-size)*14) calc(var(--p-size)*6) var(--pixel-color), calc(var(--p-size)*14) calc(var(--p-size)*7) var(--pixel-color), calc(var(--p-size)*14) calc(var(--p-size)*8) var(--pixel-color),
-      calc(var(--p-size)*5) calc(var(--p-size)*6) var(--pixel-color), calc(var(--p-size)*5) calc(var(--p-size)*7) var(--pixel-color), /* 手前の脚 */
-      calc(var(--p-size)*12) calc(var(--p-size)*6) var(--pixel-color), calc(var(--p-size)*12) calc(var(--p-size)*7) var(--pixel-color)
+      calc(var(--p-size)*6) calc(var(--p-size)*-2) var(--pixel-color), calc(var(--p-size)*7) calc(var(--p-size)*-2) var(--pixel-color),
+      calc(var(--p-size)*5) calc(var(--p-size)*-1) var(--pixel-color), calc(var(--p-size)*8) calc(var(--p-size)*-1) var(--pixel-color), calc(var(--p-size)*12) calc(var(--p-size)*-1) var(--pixel-color),
+      /* 大きな天板 */
+      calc(var(--p-size)*2) calc(var(--p-size)*0) var(--pixel-color), calc(var(--p-size)*16) calc(var(--p-size)*0) var(--pixel-color),
+      calc(var(--p-size)*0) calc(var(--p-size)*1) var(--pixel-color), calc(var(--p-size)*18) calc(var(--p-size)*1) var(--pixel-color),
+      calc(var(--p-size)*0) calc(var(--p-size)*2) var(--pixel-color), calc(var(--p-size)*18) calc(var(--p-size)*2) var(--pixel-color),
+      calc(var(--p-size)*2) calc(var(--p-size)*3) var(--pixel-color), calc(var(--p-size)*16) calc(var(--p-size)*3) var(--pixel-color),
+      /* 4本の脚 */
+      calc(var(--p-size)*3) calc(var(--p-size)*4) var(--pixel-color), calc(var(--p-size)*3) calc(var(--p-size)*6) var(--pixel-color),
+      calc(var(--p-size)*15) calc(var(--p-size)*4) var(--pixel-color), calc(var(--p-size)*15) calc(var(--p-size)*6) var(--pixel-color),
+      calc(var(--p-size)*6) calc(var(--p-size)*5) var(--pixel-color), calc(var(--p-size)*12) calc(var(--p-size)*5) var(--pixel-color)
     ;
   }
 
   /* -------------------------------------
-     改良版：全身ドット絵「オカン」
+     オカンのドット絵 (立ち姿 ＆ ひじまくら寝姿)
   ------------------------------------- */
   .okan-pixel {
     position: absolute;
-    width: calc(var(--p-size) * 16); /* 少し横幅を広く */
-    height: calc(var(--p-size) * 20); /* 2頭身の黄金比 */
-    transition: all 0.15s steps(3); /* カクカク移動 */
+    width: calc(var(--p-size) * 16);
+    height: calc(var(--p-size) * 20);
+    transition: all 0.15s steps(3);
     z-index: 10;
   }
 
-  /* ドット本体::after */
   .okan-pixel::after {
     content: ''; position: absolute;
     width: var(--p-size); height: var(--p-size);
     background: transparent;
-    transition: box-shadow 0.1s steps(1); /* 瞬き用 */
   }
 
-  /* --- 可愛い立ちオカン (パーマ・割烹着・ω口) --- */
+  /* --- 立ちポーズ --- */
   .pose-stand::after {
     box-shadow: 
-      /* パーマ髪 (丸みと隙間) */
+      /* パーマ頭 */
       calc(var(--p-size)*6) calc(var(--p-size)*0) var(--pixel-color), calc(var(--p-size)*7) calc(var(--p-size)*0) var(--pixel-color), calc(var(--p-size)*8) calc(var(--p-size)*0) var(--pixel-color), calc(var(--p-size)*9) calc(var(--p-size)*0) var(--pixel-color), calc(var(--p-size)*10) calc(var(--p-size)*0) var(--pixel-color),
       calc(var(--p-size)*4) calc(var(--p-size)*1) var(--pixel-color), calc(var(--p-size)*5) calc(var(--p-size)*1) var(--pixel-color), calc(var(--p-size)*11) calc(var(--p-size)*1) var(--pixel-color), calc(var(--p-size)*12) calc(var(--p-size)*1) var(--pixel-color),
       calc(var(--p-size)*3) calc(var(--p-size)*2) var(--pixel-color), calc(var(--p-size)*13) calc(var(--p-size)*2) var(--pixel-color),
       calc(var(--p-size)*2) calc(var(--p-size)*3) var(--pixel-color), calc(var(--p-size)*14) calc(var(--p-size)*3) var(--pixel-color),
       calc(var(--p-size)*3) calc(var(--p-size)*4) var(--pixel-color), calc(var(--p-size)*13) calc(var(--p-size)*4) var(--pixel-color),
-      calc(var(--p-size)*4) calc(var(--p-size)*5) var(--pixel-color), calc(var(--p-size)*12) calc(var(--p-size)*5) var(--pixel-color),
-      /* 顔・表情 */
-      calc(var(--p-size)*5) calc(var(--p-size)*4) var(--pixel-color), calc(var(--p-size)*11) calc(var(--p-size)*4) var(--pixel-color),
-      calc(var(--p-size)*5) calc(var(--p-size)*7) var(--pixel-color), calc(var(--p-size)*6) calc(var(--p-size)*7) var(--pixel-color), calc(var(--p-size)*10) calc(var(--p-size)*7) var(--pixel-color), calc(var(--p-size)*11) calc(var(--p-size)*7) var(--pixel-color), /* 目(通常) */
-      calc(var(--p-size)*2) calc(var(--p-size)*9) var(--pixel-color), calc(var(--p-size)*3) calc(var(--p-size)*9) var(--pixel-color), calc(var(--p-size)*13) calc(var(--p-size)*9) var(--pixel-color), calc(var(--p-size)*14) calc(var(--p-size)*9) var(--pixel-color), /* 髪の下端 */
-      calc(var(--p-size)*4) calc(var(--p-size)*10) var(--pixel-color), calc(var(--p-size)*12) calc(var(--p-size)*10) var(--pixel-color), /* アゴ */
-      calc(var(--p-size)*7) calc(var(--p-size)*9) var(--pixel-color), calc(var(--p-size)*9) calc(var(--p-size)*9) var(--pixel-color), /* ω口 */
-      /* 割烹着・体 */
-      calc(var(--p-size)*5) calc(var(--p-size)*11) var(--pixel-color), calc(var(--p-size)*11) calc(var(--p-size)*11) var(--pixel-color), /* 肩 */
-      calc(var(--p-size)*4) calc(var(--p-size)*12) var(--pixel-color), calc(var(--p-size)*12) calc(var(--p-size)*12) var(--pixel-color), /* Vネック */
-      calc(var(--p-size)*3) calc(var(--p-size)*13) var(--pixel-color), calc(var(--p-size)*13) calc(var(--p-size)*13) var(--pixel-color),
-      calc(var(--p-size)*2) calc(var(--p-size)*14) var(--pixel-color), calc(var(--p-size)*14) calc(var(--p-size)*14) var(--pixel-color),
-      calc(var(--p-size)*2) calc(var(--p-size)*16) var(--pixel-color), calc(var(--p-size)*14) calc(var(--p-size)*16) var(--pixel-color), /* エプロンの裾 */
-      calc(var(--p-size)*3) calc(var(--p-size)*17) var(--pixel-color), calc(var(--p-size)*4) calc(var(--p-size)*17) var(--pixel-color), calc(var(--p-size)*5) calc(var(--p-size)*17) var(--pixel-color), calc(var(--p-size)*11) calc(var(--p-size)*17) var(--pixel-color), calc(var(--p-size)*12) calc(var(--p-size)*17) var(--pixel-color), calc(var(--p-size)*13) calc(var(--p-size)*17) var(--pixel-color),
-      /* 手 */
-      calc(var(--p-size)*1) calc(var(--p-size)*15) var(--pixel-color), calc(var(--p-size)*15) calc(var(--p-size)*15) var(--pixel-color),
-      /* 足 */
-      calc(var(--p-size)*5) calc(var(--p-size)*18) var(--pixel-color), calc(var(--p-size)*11) calc(var(--p-size)*18) var(--pixel-color),
-      calc(var(--p-size)*4) calc(var(--p-size)*19) var(--pixel-color), calc(var(--p-size)*5) calc(var(--p-size)*19) var(--pixel-color), calc(var(--p-size)*11) calc(var(--p-size)*19) var(--pixel-color), calc(var(--p-size)*12) calc(var(--p-size)*19) var(--pixel-color)
-    ;
-  }
-
-  /* 待機中：瞬きアニメーション (目を閉じる) */
-  .pose-blink::after {
-    box-shadow: 
-      /* 髪・体などはstandと同じ (省略不可のため全コピー) */
-      calc(var(--p-size)*6) calc(var(--p-size)*0) var(--pixel-color), calc(var(--p-size)*7) calc(var(--p-size)*0) var(--pixel-color), calc(var(--p-size)*8) calc(var(--p-size)*0) var(--pixel-color), calc(var(--p-size)*9) calc(var(--p-size)*0) var(--pixel-color), calc(var(--p-size)*10) calc(var(--p-size)*0) var(--pixel-color),
-      calc(var(--p-size)*4) calc(var(--p-size)*1) var(--pixel-color), calc(var(--p-size)*5) calc(var(--p-size)*1) var(--pixel-color), calc(var(--p-size)*11) calc(var(--p-size)*1) var(--pixel-color), calc(var(--p-size)*12) calc(var(--p-size)*1) var(--pixel-color),
-      calc(var(--p-size)*3) calc(var(--p-size)*2) var(--pixel-color), calc(var(--p-size)*13) calc(var(--p-size)*2) var(--pixel-color),
-      calc(var(--p-size)*2) calc(var(--p-size)*3) var(--pixel-color), calc(var(--p-size)*14) calc(var(--p-size)*3) var(--pixel-color),
-      calc(var(--p-size)*3) calc(var(--p-size)*4) var(--pixel-color), calc(var(--p-size)*13) calc(var(--p-size)*4) var(--pixel-color),
-      calc(var(--p-size)*4) calc(var(--p-size)*5) var(--pixel-color), calc(var(--p-size)*12) calc(var(--p-size)*5) var(--pixel-color),
-      calc(var(--p-size)*5) calc(var(--p-size)*4) var(--pixel-color), calc(var(--p-size)*11) calc(var(--p-size)*4) var(--pixel-color),
-      /* 表情：目を閉じる (-) */
-      calc(var(--p-size)*5) calc(var(--p-size)*7) var(--pixel-color), calc(var(--p-size)*6) calc(var(--p-size)*7) var(--pixel-color), calc(var(--p-size)*10) calc(var(--p-size)*7) var(--pixel-color), calc(var(--p-size)*11) calc(var(--p-size)*7) var(--pixel-color),
-      /* 口、体は同じ */
-      calc(var(--p-size)*2) calc(var(--p-size)*9) var(--pixel-color), calc(var(--p-size)*3) calc(var(--p-size)*9) var(--pixel-color), calc(var(--p-size)*13) calc(var(--p-size)*9) var(--pixel-color), calc(var(--p-size)*14) calc(var(--p-size)*9) var(--pixel-color),
-      calc(var(--p-size)*4) calc(var(--p-size)*10) var(--pixel-color), calc(var(--p-size)*12) calc(var(--p-size)*10) var(--pixel-color),
-      calc(var(--p-size)*7) calc(var(--p-size)*9) var(--pixel-color), calc(var(--p-size)*9) calc(var(--p-size)*9) var(--pixel-color),
-      calc(var(--p-size)*5) calc(var(--p-size)*11) var(--pixel-color), calc(var(--p-size)*11) calc(var(--p-size)*11) var(--pixel-color),
-      calc(var(--p-size)*4) calc(var(--p-size)*12) var(--pixel-color), calc(var(--p-size)*12) calc(var(--p-size)*12) var(--pixel-color),
-      calc(var(--p-size)*3) calc(var(--p-size)*13) var(--pixel-color), calc(var(--p-size)*13) calc(var(--p-size)*13) var(--pixel-color),
+      /* 顔 (ニッコリ目とω口) */
+      calc(var(--p-size)*5) calc(var(--p-size)*6) var(--pixel-color), calc(var(--p-size)*6) calc(var(--p-size)*6) var(--pixel-color), calc(var(--p-size)*10) calc(var(--p-size)*6) var(--pixel-color), calc(var(--p-size)*11) calc(var(--p-size)*6) var(--pixel-color),
+      calc(var(--p-size)*7) calc(var(--p-size)*8) var(--pixel-color), calc(var(--p-size)*9) calc(var(--p-size)*8) var(--pixel-color),
+      calc(var(--p-size)*4) calc(var(--p-size)*9) var(--pixel-color), calc(var(--p-size)*12) calc(var(--p-size)*9) var(--pixel-color),
+      /* 割烹着 */
+      calc(var(--p-size)*5) calc(var(--p-size)*10) var(--pixel-color), calc(var(--p-size)*11) calc(var(--p-size)*10) var(--pixel-color),
+      calc(var(--p-size)*3) calc(var(--p-size)*12) var(--pixel-color), calc(var(--p-size)*13) calc(var(--p-size)*12) var(--pixel-color),
       calc(var(--p-size)*2) calc(var(--p-size)*14) var(--pixel-color), calc(var(--p-size)*14) calc(var(--p-size)*14) var(--pixel-color),
       calc(var(--p-size)*2) calc(var(--p-size)*16) var(--pixel-color), calc(var(--p-size)*14) calc(var(--p-size)*16) var(--pixel-color),
-      calc(var(--p-size)*3) calc(var(--p-size)*17) var(--pixel-color), calc(var(--p-size)*4) calc(var(--p-size)*17) var(--pixel-color), calc(var(--p-size)*5) calc(var(--p-size)*17) var(--pixel-color), calc(var(--p-size)*11) calc(var(--p-size)*17) var(--pixel-color), calc(var(--p-size)*12) calc(var(--p-size)*17) var(--pixel-color), calc(var(--p-size)*13) calc(var(--p-size)*17) var(--pixel-color),
-      calc(var(--p-size)*1) calc(var(--p-size)*15) var(--pixel-color), calc(var(--p-size)*15) calc(var(--p-size)*15) var(--pixel-color),
-      calc(var(--p-size)*5) calc(var(--p-size)*18) var(--pixel-color), calc(var(--p-size)*11) calc(var(--p-size)*18) var(--pixel-color),
-      calc(var(--p-size)*4) calc(var(--p-size)*19) var(--pixel-color), calc(var(--p-size)*5) calc(var(--p-size)*19) var(--pixel-color), calc(var(--p-size)*11) calc(var(--p-size)*19) var(--pixel-color), calc(var(--p-size)*12) calc(var(--p-size)*19) var(--pixel-color)
+      /* 足 */
+      calc(var(--p-size)*4) calc(var(--p-size)*18) var(--pixel-color), calc(var(--p-size)*5) calc(var(--p-size)*18) var(--pixel-color), calc(var(--p-size)*11) calc(var(--p-size)*18) var(--pixel-color), calc(var(--p-size)*12) calc(var(--p-size)*18) var(--pixel-color)
     ;
   }
 
-  /* --- 寝っ転がり姿オカン --- */
+  /* --- ⭐ ひじまくら・ごろ寝ポーズ (完全新設計) --- */
   .pose-lay::after {
-    transition: none; /* 回転時は一瞬で */
     box-shadow: 
-      /* 横向きのパーマ頭・アゴ */
-      calc(var(--p-size)*12) calc(var(--p-size)*5) var(--pixel-color), calc(var(--p-size)*12) calc(var(--p-size)*6) var(--pixel-color), calc(var(--p-size)*12) calc(var(--p-size)*7) var(--pixel-color), calc(var(--p-size)*12) calc(var(--p-size)*8) var(--pixel-color), calc(var(--p-size)*12) calc(var(--p-size)*9) var(--pixel-color),
-      calc(var(--p-size)*11) calc(var(--p-size)*4) var(--pixel-color), calc(var(--p-size)*11) calc(var(--p-size)*10) var(--pixel-color),
-      calc(var(--p-size)*10) calc(var(--p-size)*3) var(--pixel-color), calc(var(--p-size)*10) calc(var(--p-size)*11) var(--pixel-color),
-      calc(var(--p-size)*9) calc(var(--p-size)*2) var(--pixel-color), calc(var(--p-size)*9) calc(var(--p-size)*12) var(--pixel-color),
-      calc(var(--p-size)*8) calc(var(--p-size)*3) var(--pixel-color), calc(var(--p-size)*8) calc(var(--p-size)*11) var(--pixel-color),
-      calc(var(--p-size)*8) calc(var(--p-size)*5) var(--pixel-color), calc(var(--p-size)*8) calc(var(--p-size)*9) var(--pixel-color), /* 目 (-) */
-      calc(var(--p-size)*7) calc(var(--p-size)*4) var(--pixel-color), calc(var(--p-size)*7) calc(var(--p-size)*10) var(--pixel-color), /* アゴ端 */
-      /* 寝転がった体・割烹着 */
-      calc(var(--p-size)*6) calc(var(--p-size)*3) var(--pixel-color), calc(var(--p-size)*6) calc(var(--p-size)*11) var(--pixel-color),
-      calc(var(--p-size)*4) calc(var(--p-size)*2) var(--pixel-color), calc(var(--p-size)*4) calc(var(--p-size)*12) var(--pixel-color),
-      calc(var(--p-size)*2) calc(var(--p-size)*3) var(--pixel-color), calc(var(--p-size)*2) calc(var(--p-size)*11) var(--pixel-color),
-      calc(var(--p-size)*1) calc(var(--p-size)*5) var(--pixel-color), calc(var(--p-size)*1) calc(var(--p-size)*6) var(--pixel-color), calc(var(--p-size)*1) calc(var(--p-size)*7) var(--pixel-color), calc(var(--p-size)*1) calc(var(--p-size)*8) var(--pixel-color), calc(var(--p-size)*1) calc(var(--p-size)*9) var(--pixel-color) /* 足の裏 */
+      /* ひじまくらをしている腕 */
+      calc(var(--p-size)*1) calc(var(--p-size)*10) var(--pixel-color), calc(var(--p-size)*2) calc(var(--p-size)*11) var(--pixel-color), calc(var(--p-size)*3) calc(var(--p-size)*12) var(--pixel-color),
+      /* パーマ頭 (横向き) */
+      calc(var(--p-size)*2) calc(var(--p-size)*5) var(--pixel-color), calc(var(--p-size)*3) calc(var(--p-size)*4) var(--pixel-color), calc(var(--p-size)*4) calc(var(--p-size)*4) var(--pixel-color), calc(var(--p-size)*5) calc(var(--p-size)*4) var(--pixel-color),
+      calc(var(--p-size)*1) calc(var(--p-size)*6) var(--pixel-color), calc(var(--p-size)*1) calc(var(--p-size)*7) var(--pixel-color), calc(var(--p-size)*1) calc(var(--p-size)*8) var(--pixel-color),
+      /* 顔 (目を閉じてリラックス) */
+      calc(var(--p-size)*4) calc(var(--p-size)*7) var(--pixel-color), calc(var(--p-size)*5) calc(var(--p-size)*7) var(--pixel-color), /* 閉じた目 */
+      calc(var(--p-size)*5) calc(var(--p-size)*9) var(--pixel-color), /* アゴ */
+      /* 寝そべった体と割烹着 */
+      calc(var(--p-size)*6) calc(var(--p-size)*8) var(--pixel-color), calc(var(--p-size)*7) calc(var(--p-size)*8) var(--pixel-color),
+      calc(var(--p-size)*8) calc(var(--p-size)*9) var(--pixel-color), calc(var(--p-size)*9) calc(var(--p-size)*9) var(--pixel-color), calc(var(--p-size)*10) calc(var(--p-size)*9) var(--pixel-color), calc(var(--p-size)*11) calc(var(--p-size)*9) var(--pixel-color), calc(var(--p-size)*12) calc(var(--p-size)*9) var(--pixel-color),
+      calc(var(--p-size)*6) calc(var(--p-size)*12) var(--pixel-color), calc(var(--p-size)*7) calc(var(--p-size)*12) var(--pixel-color), calc(var(--p-size)*8) calc(var(--p-size)*12) var(--pixel-color), calc(var(--p-size)*9) calc(var(--p-size)*12) var(--pixel-color), calc(var(--p-size)*10) calc(var(--p-size)*12) var(--pixel-color), calc(var(--p-size)*11) calc(var(--p-size)*12) var(--pixel-color), calc(var(--p-size)*12) calc(var(--p-size)*12) var(--pixel-color),
+      /* 曲げた足 */
+      calc(var(--p-size)*13) calc(var(--p-size)*10) var(--pixel-color), calc(var(--p-size)*14) calc(var(--p-size)*9) var(--pixel-color), calc(var(--p-size)*15) calc(var(--p-size)*10) var(--pixel-color),
+      calc(var(--p-size)*13) calc(var(--p-size)*11) var(--pixel-color), calc(var(--p-size)*14) calc(var(--p-size)*12) var(--pixel-color)
     ;
   }
 
-  /* 位置パターン */
-  .pos-tv { top: 70px; left: 40px; }
-  .pos-ちゃぶ台 { top: 110px; right: 80px; }
-  .pos-center { top: 90px; left: 40%; }
+  /* キャラの位置 */
+  .pos-tv { top: 60px; right: 35px; }
+  .pos-chabudai-left { top: 100px; left: 15px; }
+  .pos-chabudai-right { top: 100px; right: 15px; }
+  .pos-center { top: 65px; left: 20px; }
 
-  /* おならドット */
+  /* ⭐ 改良版：おなら吹き出しドット絵アニメーション ⭐ */
   .fart-pixel {
-    position: absolute; width: var(--p-size); height: var(--p-size);
-    background: transparent; opacity: 0;
-    transition: all 0.1s; z-index: 9;
+    position: absolute;
+    width: var(--p-size); height: var(--p-size);
+    background: transparent;
+    opacity: 0;
+    z-index: 15;
   }
-  .fart-active {
-    opacity: 1;
-    box-shadow: 
-      calc(var(--p-size)*0) calc(var(--p-size)*0) var(--pixel-color),
-      calc(var(--p-size)*1) calc(var(--p-size)*-1) var(--pixel-color), calc(var(--p-size)*1) calc(var(--p-size)*1) var(--pixel-color),
-      calc(var(--p-size)*2) calc(var(--p-size)*0) var(--pixel-color)
-    ;
-    animation: fart-puff 0.5s steps(2) infinite;
+  
+  /* ごろ寝時のお尻の位置（右側）に合わせる */
+  .pos-chabudai-left .fart-pixel, .pos-chabudai-right .fart-pixel {
+    top: calc(var(--p-size) * 8);
+    right: calc(var(--p-size) * -4);
   }
-  @keyframes fart-puff { 0% { opacity: 1; } 100% { opacity: 0; } }
 
-  /* ドラクエ風掃除アニメ (点滅ステップ) */
+  .fart-active {
+    animation: fart-animation 1s steps(4) infinite;
+  }
+
+  @keyframes fart-animation {
+    0% {
+      opacity: 1;
+      box-shadow: calc(var(--p-size)*0) calc(var(--p-size)*0) var(--pixel-color);
+    }
+    33% {
+      opacity: 1;
+      /* 煙が少し大きくなる */
+      box-shadow: 
+        calc(var(--p-size)*1) calc(var(--p-size)*-1) var(--pixel-color), calc(var(--p-size)*2) calc(var(--p-size)*-1) var(--pixel-color),
+        calc(var(--p-size)*0) calc(var(--p-size)*0) var(--pixel-color), calc(var(--p-size)*3) calc(var(--p-size)*0) var(--pixel-color),
+        calc(var(--p-size)*1) calc(var(--p-size)*1) var(--pixel-color), calc(var(--p-size)*2) calc(var(--p-size)*1) var(--pixel-color);
+    }
+    66% {
+      opacity: 1;
+      /* モコモコ広がる 💨 */
+      box-shadow: 
+        calc(var(--p-size)*2) calc(var(--p-size)*-2) var(--pixel-color), calc(var(--p-size)*3) calc(var(--p-size)*-2) var(--pixel-color),
+        calc(var(--p-size)*1) calc(var(--p-size)*-1) var(--pixel-color), calc(var(--p-size)*4) calc(var(--p-size)*-1) var(--pixel-color),
+        calc(var(--p-size)*1) calc(var(--p-size)*1) var(--pixel-color), calc(var(--p-size)*4) calc(var(--p-size)*1) var(--pixel-color),
+        calc(var(--p-size)*2) calc(var(--p-size)*2) var(--pixel-color), calc(var(--p-size)*3) calc(var(--p-size)*2) var(--pixel-color);
+    }
+    100% { opacity: 0; }
+  }
+
+  /* ドラクエ風掃除アニメ */
   @keyframes clean-dq {
-    0% { left: 30px; top: 120px; transform: scaleX(1); opacity: 1;}
-    25% { opacity: 0.5; }
-    50% { left: 180px; top: 80px; transform: scaleX(-1); opacity: 1;}
-    75% { opacity: 0.5; }
-    100% { left: 30px; top: 120px; transform: scaleX(1); opacity: 1;}
+    0% { left: 15px; top: 100px; transform: scaleX(1); opacity: 1;}
+    50% { left: 200px; top: 70px; transform: scaleX(-1); opacity: 0.7;}
+    100% { left: 15px; top: 100px; transform: scaleX(1); opacity: 1;}
   }
   .anim-cleaning {
-    animation: clean-dq 3s infinite steps(10) !important;
+    animation: clean-dq 3s infinite steps(8) !important;
   }
 
-  /* ダイアログ */
   .dialogue-box {
     position: absolute; bottom: 0; left: 0; right: 0;
     height: 35px;
@@ -298,14 +286,16 @@
 
 <div class="game-container" id="game" style="display:none;">
   <div class="screen">
-    <!--背景とお部屋 (精巧なドット絵家具) -->
+    <!-- 昭和の居間 背景 -->
     <div class="room-bg">
-      <div class="furniture clock"></div>
+      <div class="furniture kakejiku"></div>
       <div class="furniture tv-set"></div>
+      <div class="furniture phone"></div>
       <div class="furniture ちゃぶ台"></div>
+      <div class="tatami-floor"></div>
     </div>
 
-    <!-- 精巧全身ドット絵オカン -->
+    <!-- オカン -->
     <div id="okan-container" class="okan-pixel pos-tv pose-stand">
       <div id="fart-pixel" class="fart-pixel"></div>
     </div>
@@ -339,7 +329,6 @@
   let mood = 40;
   let weight = 55.0;
   let isBusy = false;
-  let blinkTimer;
 
   const lines = [
     "あんた、ちゃんとご飯食べてるの？",
@@ -349,9 +338,9 @@
   ];
 
   const idleStates = [
-    { pos: "pos-tv", pose: "pose-stand", text: "ワイドショーを真剣に見ている", state: "テレビ鑑賞" },
-    { pos: "pos-ちゃぶ台", pose: "pose-lay", text: "ちゃぶ台の横でゴロゴロ寝転がっている", state: "ゴロゴロ居眠り" },
-    { pos: "pos-center", pose: "pose-stand", text: "部屋の真ん中でぼーっとしている", state: "立ち話" }
+    { pos: "pos-tv", pose: "pose-stand", text: "テレビのワイドショーに夢中", state: "テレビ鑑賞" },
+    { pos: "pos-chabudai-left", pose: "pose-lay", text: "ちゃぶ台の横でゴロゴロ寝転がっている", state: "ゴロゴロ居眠り" },
+    { pos: "pos-center", pose: "pose-stand", text: "黒電話の横でぼーっとしている", state: "長電話待ち" }
   ];
 
   function updateDisplay() {
@@ -362,23 +351,7 @@
     document.getElementById("weight-val").innerText = weight.toFixed(1);
   }
 
-  // ⭐ 瞬きアニメーション (1.5秒ごとにパチパチ)
-  function startBlinking() {
-    blinkTimer = setInterval(() => {
-      const okan = document.getElementById("okan-container");
-      if (okan.className.includes("pose-stand")) {
-        okan.classList.remove("pose-stand");
-        okan.classList.add("pose-blink");
-        setTimeout(() => {
-          okan.classList.remove("pose-blink");
-          okan.classList.add("pose-stand");
-        }, 150); // 瞬き時間
-      }
-    }, 1500);
-  }
-  startBlinking();
-
-  // 行動切り替え
+  // 自動行動
   setInterval(() => {
     if (isBusy) return;
     const action = idleStates[Math.floor(Math.random() * idleStates.length)];
@@ -388,21 +361,26 @@
     document.getElementById("state-val").innerText = action.state;
   }, 4000);
 
+  // ⭐ おならイベント ⭐
   function checkFart() {
-    if (Math.random() < 0.3) {
+    if (Math.random() < 0.4) {
       isBusy = true;
       const container = document.getElementById("okan-container");
       const fart = document.getElementById("fart-pixel");
-      container.className = "okan-pixel pos-ちゃぶ台 pose-lay";
+
+      // ごろ寝ポーズに移行
+      container.className = "okan-pixel pos-chabudai-left pose-lay";
+
       setTimeout(() => {
         fart.className = "fart-pixel fart-active";
-        document.getElementById("dialogue").innerText = "……プゥッ！あらやだ！";
-        document.getElementById("state-val").innerText = "放屁(寝ながら)";
-      }, 300);
+        document.getElementById("dialogue").innerText = "……ス〜……プッ💨 あらやだ！";
+        document.getElementById("state-val").innerText = "放屁(ごろ寝中)";
+      }, 400);
+
       setTimeout(() => {
         fart.className = "fart-pixel";
         isBusy = false;
-      }, 3000);
+      }, 3200);
       return true;
     }
     return false;
@@ -412,7 +390,7 @@
     mood = Math.min(100, mood + 15); weight += 0.3;
     isBusy = true;
     const container = document.getElementById("okan-container");
-    container.className = "okan-pixel pos-ちゃぶ台 pose-stand";
+    container.className = "okan-pixel pos-chabudai-right pose-stand";
     document.getElementById("dialogue").innerText = "やだ～、呑んじゃおうかしら♪";
     document.getElementById("state-val").innerText = "晩酌中";
     updateDisplay();
@@ -423,7 +401,7 @@
     mood = Math.min(100, mood + 10); weight += 0.5;
     isBusy = true;
     const container = document.getElementById("okan-container");
-    container.className = "okan-pixel pos-ちゃぶ台 pose-lay";
+    container.className = "okan-pixel pos-chabudai-left pose-lay";
     document.getElementById("dialogue").innerText = "寝っ転がって食べるおせんべいが最高";
     document.getElementById("state-val").innerText = "寝ながら間食";
     updateDisplay();
@@ -435,7 +413,7 @@
     isBusy = true;
     const container = document.getElementById("okan-container");
     container.className = "okan-pixel anim-cleaning";
-    document.getElementById("dialogue").innerText = "え～、掃除ぃ？…";
+    document.getElementById("dialogue").innerText = "はいはい、掃除すればいいんでしょ！";
     document.getElementById("state-val").innerText = "部屋を掃除中";
     updateDisplay();
     setTimeout(() => {
